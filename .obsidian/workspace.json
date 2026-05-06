@@ -1,0 +1,216 @@
+{
+  "main": {
+    "id": "141604db3b91e3e4",
+    "type": "split",
+    "children": [
+      {
+        "id": "8ee8e6cb220e48c6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c3e67e3c2d0b04e6",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "그래프 뷰"
+            }
+          },
+          {
+            "id": "a7026a6d73557aeb",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "그래프 뷰"
+            }
+          },
+          {
+            "id": "7f6ae399ab241542",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "그래프 뷰"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d8d630fd9c4f3b9a",
+    "type": "split",
+    "children": [
+      {
+        "id": "b4df674eed469970",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a1aadf6f16089e73",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "파일 탐색기"
+            }
+          },
+          {
+            "id": "cbb151dd6f480159",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "검색"
+            }
+          },
+          {
+            "id": "bd92ddaae4cf5b51",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "북마크"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "13a96f4a0f3858e6",
+    "type": "split",
+    "children": [
+      {
+        "id": "c2687be3d6e1d89b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ec6e1212d1ce7f2f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "백링크"
+            }
+          },
+          {
+            "id": "a067dc2e27ef61bf",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "나가는 링크"
+            }
+          },
+          {
+            "id": "eee1f1133e3c75ba",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "태그"
+            }
+          },
+          {
+            "id": "2cbdb90f3c0fa88c",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "모든 속성"
+            }
+          },
+          {
+            "id": "b5835f9825a45351",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "개요"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "bases:새 베이스 생성하기": false
+    }
+  },
+  "active": "7f6ae399ab241542",
+  "lastOpenFiles": [
+    "README.md",
+    "antigravity.config copy.json",
+    "antigravity.config.json",
+    "유튜브 음악 에이전트/__pycache__/youtube_auth.cpython-311.pyc",
+    "유튜브 음악 에이전트/__pycache__",
+    "유튜브 음악 에이전트/youtube_uploader.py",
+    "유튜브 음악 에이전트/youtube_auth.py",
+    "유튜브 음악 에이전트/video_renderer.py",
+    "유튜브 음악 에이전트/token.json",
+    "유튜브 음악 에이전트/requirements.txt",
+    "유튜브 음악 에이전트/music_generator.py",
+    "첫번째 기억.md",
+    "환영합니다!.md",
+    "해방 이미지.md"
+  ]
+}
