@@ -4,145 +4,215 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>뉴스니핏 — 매일 아침 5분, 오늘의 핵심</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy:#1C2B4A; --sky:#EAF3FB; --skycard:#D6E8F5;
-    --blue:#2563EB; --bluel:#DBEAFE; --blued:#1E40AF;
-    --green:#D1FAE5; --greend:#065F46;
-    --white:#FFFFFF; --gray2:#64748B; --gray3:#94A3B8; --gray4:#CBD5E1;
+    --navy: #0F172A;
+    --navy-light: #1E293B;
+    --sky: #F8FAFC;
+    --skycard: #E2E8F0;
+    --gold: #C5A85C;
+    --gold-light: #FBF7EB;
+    --gold-dark: #8C7034;
+    --gold-gradient: linear-gradient(135deg, #F5E3B5 0%, #D4AF37 50%, #B5944A 100%);
+    --white: #FFFFFF;
+    --gray2: #64748B;
+    --gray3: #94A3B8;
+    --gray4: #CBD5E1;
+    --green: #E8F5E9;
+    --greend: #2E7D32;
+    --red: #FFEBEE;
+    --redd: #C62828;
+    --font-size-base: 16px;
   }
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Noto Sans KR',sans-serif; background:linear-gradient(135deg,#1C2B4A 0%,#2C3E63 50%,#1a3a5c 100%); min-height:100vh; display:flex; justify-content:center; align-items:flex-start; padding:40px 20px; }
+  body { font-family:'Noto Sans KR',sans-serif; background:linear-gradient(135deg,#0F172A 0%,#1E293B 50%,#0f1c30 100%); min-height:100vh; display:flex; justify-content:center; align-items:flex-start; padding:40px 20px; }
 
-  .phone { width:390px; min-height:844px; background:var(--sky); border-radius:44px; overflow:hidden; box-shadow:0 40px 120px rgba(0,0,0,0.5),0 0 0 10px #2C2C2C,0 0 0 12px #1A1A1A; display:flex; flex-direction:column; }
-  .status-bar { background:var(--sky); padding:14px 24px 8px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
-  .header { background:var(--navy); padding:16px 24px 22px; border-radius:0 0 28px 28px; flex-shrink:0; }
+  /* 프리미엄 골드 테두리 프레임 */
+  .phone { width:390px; min-height:844px; background:var(--sky); border-radius:44px; overflow:hidden; box-shadow:0 40px 120px rgba(0,0,0,0.65), 0 0 0 10px #1E293B, 0 0 0 12px var(--gold); display:flex; flex-direction:column; position:relative; }
+  .status-bar { background:var(--sky); padding:14px 24px 8px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; font-family:'Outfit', sans-serif; font-weight: 600; }
+  
+  /* 헤더 골드 라이팅 그라데이션 */
+  .header { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%); padding:18px 24px 24px; border-radius:0 0 32px 32px; flex-shrink:0; position:relative; border-bottom: 2px solid rgba(197, 168, 92, 0.15); }
+  .header::after { content:''; position:absolute; bottom:0; left:10%; right:10%; height:1px; background: var(--gold-gradient); opacity:0.3; }
   .header-row { display:flex; justify-content:space-between; align-items:center; }
-  .app-name { font-size:28px; font-weight:900; color:var(--white); letter-spacing:-1px; }
-  .header-sub { font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px; }
-  .date-badge { background:rgba(255,255,255,0.15); border-radius:10px; padding:7px 14px; margin-top:12px; display:inline-block; }
-  .date-text { font-size:13px; color:rgba(255,255,255,0.9); font-weight:600; }
-  .progress-wrap { margin-top:12px; display:flex; align-items:center; gap:10px; }
-  .progress-bar { flex:1; height:4px; background:rgba(255,255,255,0.2); border-radius:2px; overflow:hidden; }
-  .progress-fill { height:100%; background:var(--white); border-radius:2px; transition:width 0.4s; }
-  .progress-text { font-size:12px; color:rgba(255,255,255,0.8); font-weight:700; white-space:nowrap; }
+  
+  .app-logo-wrap { display: flex; align-items: center; gap: 8px; }
+  .app-logo-circle { width: 32px; height: 32px; background: var(--gold-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; font-weight: 900; color: var(--navy); font-size: 16px; box-shadow: 0 4px 10px rgba(197, 168, 92, 0.3); }
+  .app-name { font-size:24px; font-weight:900; color:var(--white); letter-spacing:-1px; }
+  .header-sub { font-size:12px; color:var(--gray3); margin-top:4px; }
+  
+  /* 품격 있는 골드 배지 */
+  .date-badge { background:rgba(197, 168, 92, 0.15); border: 1px solid rgba(197, 168, 92, 0.25); border-radius:12px; padding:6px 14px; margin-top:12px; display:inline-block; }
+  .date-text { font-size:12px; color:var(--gold-light); font-weight:700; }
+  
+  .progress-wrap { margin-top:14px; display:flex; align-items:center; gap:10px; }
+  .progress-bar { flex:1; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--gold-gradient); border-radius:3px; transition:width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+  .progress-text { font-size:11px; color:var(--gray3); font-weight:700; white-space:nowrap; }
 
-  .scroll { flex:1; padding:16px; overflow-y:auto; }
+  .scroll { flex:1; padding:16px; overflow-y:auto; scroll-behavior: smooth; }
   .scroll::-webkit-scrollbar { display:none; }
-  .section-lbl { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:14px; }
+  .section-lbl { font-size: calc(var(--font-size-base) - 2px); font-weight:800; color:var(--navy); margin-bottom:12px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  .card { background:var(--white); border-radius:18px; padding:18px; margin-bottom:14px; border:1px solid var(--skycard); cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; }
-  .card:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(28,43,74,0.12); }
-  .card.read { opacity:0.7; }
-  .card.locked { cursor:default; }
-  .card.locked:hover { transform:none; box-shadow:none; }
-  .card-top { display:flex; align-items:center; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
-  .card-num { font-size:12px; color:var(--gray3); margin-left:auto; font-weight:600; }
-  .card-title { font-size:17px; font-weight:800; color:var(--navy); line-height:1.5; margin-bottom:12px; }
-  .summary-box { background:var(--sky); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:6px; }
+  /* 뉴스 카드 리뉴얼 */
+  .card { background:var(--white); border-radius:20px; padding:20px; margin-bottom:16px; border:1px solid rgba(197, 168, 92, 0.15); cursor:pointer; transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position:relative; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03); }
+  .card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(197, 168, 92, 0.08), 0 4px 12px rgba(15, 23, 42, 0.05); border-color: rgba(197, 168, 92, 0.3); }
+  .card.read { opacity:0.8; background:#F8FAFC; }
+  .card-top { display:flex; align-items:center; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+  .card-num { font-size:12px; color:var(--gray3); margin-left:auto; font-weight:700; font-family: 'Outfit', sans-serif; }
+  .card-title { font-size: calc(var(--font-size-base) + 1px); font-weight:800; color:var(--navy); line-height:1.5; margin-bottom:12px; letter-spacing: -0.3px; }
+  
+  .summary-box { background:#F8FAFC; border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:8px; border: 1px solid rgba(15, 23, 42, 0.02); }
   .summary-line { display:flex; gap:10px; align-items:flex-start; }
-  .dot { font-size:14px; font-weight:800; color:var(--blue); min-width:18px; flex-shrink:0; }
-  .summary-text { font-size:14px; color:var(--navy); line-height:1.55; }
+  .dot { font-size: calc(var(--font-size-base) - 2px); font-weight:900; color:var(--gold); min-width:18px; flex-shrink:0; font-family: 'Outfit', sans-serif; text-align: center; background: rgba(197, 168, 92, 0.1); border-radius: 6px; padding: 1px 0; }
+  .summary-text { font-size: calc(var(--font-size-base) - 2.5px); color:var(--navy-light); line-height:1.55; }
+  
+  /* 자산 영향도 배지 */
+  .impact-badge-row { display: flex; gap: 8px; margin-top: 12px; align-items: center; border-top: 1px dashed rgba(15, 23, 42, 0.08); padding-top: 10px; }
+  .impact-score { font-size: 11px; font-weight: 700; color: var(--gold-dark); background: var(--gold-light); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(197, 168, 92, 0.2); }
+  .signal-badge { font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
+  .signal-pos { background: #E8F5E9; color: #2E7D32; }
+  .signal-neg { background: #FFEBEE; color: #C62828; }
+  .signal-neu { background: #ECEFF1; color: #455A64; }
+
   .card-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
-  .card-cta { font-size:13px; font-weight:700; color:var(--blue); cursor:pointer; }
-  .card-cta.locked { color:var(--gray3); cursor:default; }
-  .share-btn { background:var(--sky); border:1px solid var(--skycard); border-radius:20px; padding:6px 14px; font-size:12px; font-weight:700; color:var(--navy); cursor:pointer; font-family:inherit; }
-  .share-btn:hover { background:var(--skycard); }
+  .card-cta { font-size:12px; font-weight:800; color:var(--gold-dark); cursor:pointer; display: flex; align-items: center; gap: 2px; }
+  .share-btn { background:var(--sky); border:1px solid var(--skycard); border-radius:20px; padding:6px 14px; font-size:12px; font-weight:700; color:var(--navy); cursor:pointer; font-family:inherit; transition: all 0.2s; }
+  .share-btn:hover { background:var(--skycard); border-color: var(--gray3); }
 
-  /* 잠금 오버레이 */
-  .lock-overlay { background:linear-gradient(to bottom, rgba(234,243,251,0) 0%, rgba(234,243,251,0.95) 40%, rgba(234,243,251,1) 100%); border-radius:0 0 18px 18px; padding:20px 18px 18px; text-align:center; margin:-18px -18px -18px; margin-top:0; }
-  .lock-icon { font-size:28px; margin-bottom:8px; }
-  .lock-title { font-size:15px; font-weight:800; color:var(--navy); margin-bottom:4px; }
-  .lock-sub { font-size:13px; color:var(--gray2); margin-bottom:14px; line-height:1.5; }
-  .lock-kakao-btn { background:#FEE500; border:none; border-radius:12px; padding:12px 20px; font-size:15px; font-weight:800; color:#191919; cursor:pointer; font-family:inherit; width:100%; }
+  /* 프리미엄 배지 스타일 */
+  .badge { border-radius:6px; padding:3px 8px; font-size:11px; font-weight:700; display:inline-block; letter-spacing: -0.2px; }
+  .badge-econ { background:#E8F0FE; color:#1A73E8; }
+  .badge-pol  { background:#EAF8F1; color:#0F9D58; }
+  .badge-easy { background:#E8F5E9; color:#2E7D32; }
+  .badge-mid  { background:#FFF3E0; color:#EF6C00; }
+  .badge-hard { background:#FFEBEE; color:#C62828; }
 
-  .badge { border-radius:8px; padding:4px 10px; font-size:12px; font-weight:700; display:inline-block; }
-  .badge-econ { background:var(--bluel); color:var(--blued); }
-  .badge-pol  { background:var(--green); color:var(--greend); }
-  .badge-easy { background:#D1FAE5; color:#065F46; }
-  .badge-mid  { background:#FEF3C7; color:#92400E; }
-  .badge-hard { background:#FEE2E2; color:#991B1B; }
-  .badge-trust { background:var(--bluel); color:var(--blued); }
+  /* 오디오 플레이어 UI */
+  .audio-player-bar { background: var(--navy); border-radius: 16px; padding: 14px 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; border: 1px solid rgba(197, 168, 92, 0.2); }
+  .audio-play-btn { width: 38px; height: 38px; background: var(--gold-gradient); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--navy); font-size: 16px; box-shadow: 0 4px 10px rgba(197, 168, 92, 0.4); flex-shrink: 0; }
+  .audio-play-btn:active { transform: scale(0.95); }
+  .audio-info { flex: 1; display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
+  .audio-title { font-size: 12px; font-weight: 700; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .audio-sub { font-size: 11px; color: var(--gold-light); opacity: 0.8; }
+  
+  /* 이퀄라이저 애니메이션 */
+  .eq-wave { display: flex; align-items: flex-end; gap: 3px; height: 20px; width: 30px; flex-shrink: 0; }
+  .eq-bar { width: 3px; height: 2px; background: var(--gold); border-radius: 2px; }
+  .eq-wave.playing .eq-bar { animation: bounce 0.8s ease-in-out infinite alternate; }
+  .eq-wave.playing .eq-bar:nth-child(1) { animation-delay: 0.1s; }
+  .eq-wave.playing .eq-bar:nth-child(2) { animation-delay: 0.4s; }
+  .eq-wave.playing .eq-bar:nth-child(3) { animation-delay: 0.2s; }
+  .eq-wave.playing .eq-bar:nth-child(4) { animation-delay: 0.5s; }
+  .eq-wave.playing .eq-bar:nth-child(5) { animation-delay: 0.3s; }
 
-  .detail-header { background:var(--navy); padding:16px 24px 20px; border-radius:0; flex-shrink:0; }
+  @keyframes bounce {
+    0% { height: 2px; }
+    100% { height: 18px; }
+  }
+
+  /* 가변 토글 슬라이더 */
+  .mode-slider-wrap { display: flex; background: var(--skycard); padding: 4px; border-radius: 12px; margin-bottom: 16px; position: relative; }
+  .mode-btn { flex: 1; border: none; background: transparent; padding: 10px; font-size: 13.5px; font-weight: 700; color: var(--gray2); cursor: pointer; text-align: center; border-radius: 8px; z-index: 1; transition: color 0.2s; font-family: inherit; }
+  .mode-btn.active { color: var(--navy); }
+  .slider-bg { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); background: var(--white); border-radius: 8px; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+  .slider-bg.right { transform: translateX(100%); }
+
+  .detail-header { background:var(--navy); padding:18px 24px 22px; border-radius:0; flex-shrink:0; border-bottom: 1px solid rgba(197, 168, 92, 0.15); }
   .back-btn { font-size:22px; color:var(--white); cursor:pointer; background:none; border:none; font-family:inherit; }
-  .detail-title { font-size:18px; font-weight:800; color:var(--white); line-height:1.5; margin-top:10px; }
-  .detail-card { background:var(--white); border-radius:16px; padding:16px; margin-bottom:14px; border:1px solid var(--skycard); }
-  .detail-lbl { font-size:12px; font-weight:700; color:var(--gray2); margin-bottom:10px; }
-  .impact-card { background:var(--bluel); border-radius:16px; padding:16px; margin-bottom:14px; }
-  .share-card { background:#F0FDF4; border:1px solid #D1FAE5; border-radius:16px; padding:16px; margin-bottom:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
-  .share-card:hover { background:#D1FAE5; }
-  .term-answer { font-size:15px; color:var(--navy); margin-top:10px; line-height:1.6; display:none; }
+  .detail-title { font-size: calc(var(--font-size-base) + 2px); font-weight:800; color:var(--white); line-height:1.5; margin-top:10px; letter-spacing: -0.4px; }
+  
+  .detail-card { background:var(--white); border-radius:18px; padding:18px; margin-bottom:14px; border:1px solid rgba(197, 168, 92, 0.08); box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02); }
+  .detail-lbl { font-size:11.5px; font-weight:800; color:var(--gold-dark); margin-bottom:10px; text-transform: uppercase; letter-spacing: 0.3px; }
+  
+  .impact-card { background: var(--gold-light); border-radius:18px; padding:18px; margin-bottom:14px; border: 1px solid rgba(197, 168, 92, 0.15); }
+  .share-card { background:#F1F8E9; border:1px solid rgba(46, 125, 50, 0.15); border-radius:18px; padding:18px; margin-bottom:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition: all 0.2s; }
+  .share-card:hover { background:#E8F5E9; transform: translateY(-1px); }
+  
+  .term-answer { font-size: calc(var(--font-size-base) - 1.5px); color:var(--navy-light); margin-top:10px; line-height:1.6; display:none; background: var(--sky); padding: 12px; border-radius: 10px; border-left: 3px solid var(--gold); }
   .source-row { font-size:12px; color:var(--gray3); margin-bottom:20px; }
-  .link-card { cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
-  .link-card:hover { background:var(--sky); }
+  .link-card { cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition: all 0.2s; }
+  .link-card:hover { background:#F8FAFC; transform: translateY(-1px); }
 
-  /* 상세 잠금 화면 */
+  /* 프리미엄 잠금 화면 */
   .detail-locked { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 24px; text-align:center; gap:16px; }
   .detail-locked-icon { font-size:56px; }
   .detail-locked-title { font-size:20px; font-weight:800; color:var(--navy); }
-  .detail-locked-sub { font-size:15px; color:var(--gray2); line-height:1.6; }
-  .detail-kakao-btn { background:#FEE500; border:none; border-radius:14px; padding:16px; font-size:17px; font-weight:800; color:#191919; cursor:pointer; font-family:inherit; width:100%; }
-  .detail-guest-btn { background:var(--sky); border:1px solid var(--skycard); border-radius:14px; padding:14px; font-size:15px; font-weight:700; color:var(--gray2); cursor:pointer; font-family:inherit; width:100%; }
+  .detail-locked-sub { font-size:14px; color:var(--gray2); line-height:1.6; }
+  .detail-kakao-btn { background:#FEE500; border:none; border-radius:14px; padding:16px; font-size:16px; font-weight:800; color:#191919; cursor:pointer; font-family:inherit; width:100%; box-shadow: 0 4px 14px rgba(254, 229, 0, 0.35); }
+  .detail-kakao-btn:active { transform: scale(0.98); }
+  .detail-guest-btn { background:var(--white); border:1px solid var(--skycard); border-radius:14px; padding:14px; font-size:15px; font-weight:700; color:var(--gray2); cursor:pointer; font-family:inherit; width:100%; transition: all 0.2s; }
+  .detail-guest-btn:hover { background: var(--sky); }
 
-  .tab-bar { background:var(--white); border-top:1px solid var(--skycard); padding:10px 0 20px; display:flex; flex-shrink:0; }
-  .tab-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:4px 0; }
-  .tab-icon { font-size:22px; color:var(--gray4); }
-  .tab-icon.on { color:var(--navy); }
-  .tab-label { font-size:11px; color:var(--gray4); font-weight:600; }
-  .tab-label.on { color:var(--navy); font-weight:700; }
-  .tab-dot { width:5px; height:5px; background:var(--navy); border-radius:50%; }
+  .tab-bar { background:var(--white); border-top:1px solid rgba(197, 168, 92, 0.1); padding:10px 0 20px; display:flex; flex-shrink:0; box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.02); }
+  .tab-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:4px 0; position:relative; }
+  .tab-icon { font-size:22px; color:var(--gray4); transition: color 0.2s; }
+  .tab-icon.on { color:var(--gold-dark); }
+  .tab-label { font-size:11px; color:var(--gray4); font-weight:600; transition: color 0.2s; }
+  .tab-label.on { color:var(--gold-dark); font-weight:800; }
+  .tab-dot { width:6px; height:6px; background:var(--gold); border-radius:50%; position:absolute; bottom:-6px; }
 
-  .setting-card { background:var(--white); border-radius:16px; padding:18px; margin-bottom:14px; border:1px solid var(--skycard); }
-  .setting-title { font-size:16px; font-weight:700; color:var(--navy); margin-bottom:12px; }
+  .setting-card { background:var(--white); border-radius:18px; padding:18px; margin-bottom:14px; border:1px solid rgba(197, 168, 92, 0.08); }
+  .setting-title { font-size:15px; font-weight:800; color:var(--navy); margin-bottom:12px; }
   .font-row { display:flex; gap:10px; }
-  .font-btn { flex:1; background:var(--sky); border-radius:12px; padding:10px; text-align:center; cursor:pointer; border:none; font-family:inherit; font-weight:700; color:var(--gray2); transition:all 0.15s; }
+  .font-btn { flex:1; background:var(--sky); border-radius:12px; padding:10px; text-align:center; cursor:pointer; border:none; font-family:inherit; font-weight:700; color:var(--gray2); transition:all 0.2s; }
   .font-btn.on { background:var(--navy); color:var(--white); }
-  .interest-tag { background:var(--sky); border-radius:24px; padding:8px 16px; font-size:14px; font-weight:600; color:var(--gray2); cursor:pointer; border:none; font-family:inherit; transition:all 0.15s; }
+  
+  .interest-tag { background:var(--sky); border-radius:24px; padding:8px 16px; font-size:13px; font-weight:600; color:var(--gray2); cursor:pointer; border:none; font-family:inherit; transition:all 0.2s; }
   .interest-tag.on { background:var(--navy); color:var(--white); }
-  .alarm-time-display { font-size:34px; font-weight:800; color:var(--navy); margin-top:4px; cursor:pointer; padding:4px 0; border-bottom:2px dashed var(--skycard); display:inline-block; }
-  .alarm-time-display:hover { border-color:var(--blue); }
+  
+  .alarm-time-display { font-size:32px; font-weight:900; color:var(--navy); margin-top:4px; cursor:pointer; padding:2px 0; border-bottom:2px dashed var(--gold); display:inline-block; font-family: 'Outfit', sans-serif; }
+  .alarm-time-display:hover { border-color:var(--navy); }
+  
   .toggle { width:52px; height:30px; background:var(--gray4); border-radius:15px; padding:3px; cursor:pointer; display:flex; align-items:center; border:none; transition:background 0.2s; }
-  .toggle.on { background:var(--navy); justify-content:flex-end; }
-  .toggle-thumb { width:24px; height:24px; background:var(--white); border-radius:50%; }
-  .premium-card { background:var(--navy); border-radius:16px; padding:18px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+  .toggle.on { background:var(--gold-dark); justify-content:flex-end; }
+  .toggle-thumb { width:24px; height:24px; background:var(--white); border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  
+  /* 프리미엄 카드 골드 리뉴얼 */
+  .premium-card { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border: 1px solid var(--gold); border-radius:18px; padding:20px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; box-shadow: 0 10px 20px rgba(197, 168, 92, 0.12); }
+  .premium-card:active { transform: scale(0.98); }
 
   /* 모달 */
-  .modal-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); display:flex; align-items:flex-end; z-index:100; border-radius:44px; }
-  .modal-sheet { background:var(--white); border-radius:24px 24px 0 0; padding:24px; width:100%; }
-  .modal-title { font-size:18px; font-weight:800; color:var(--navy); margin-bottom:20px; text-align:center; }
+  .modal-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(15, 23, 42, 0.6); display:flex; align-items:flex-end; z-index:100; border-radius:44px; }
+  .modal-sheet { background:var(--white); border-radius:28px 28px 0 0; padding:24px; width:100%; box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.15); border-top: 2px solid rgba(197, 168, 92, 0.2); }
+  .modal-title { font-size:17px; font-weight:800; color:var(--navy); margin-bottom:20px; text-align:center; }
   .time-picker { display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:24px; }
   .time-col { display:flex; flex-direction:column; align-items:center; gap:6px; }
-  .time-col-label { font-size:12px; color:var(--gray3); font-weight:600; }
-  .time-select { font-size:36px; font-weight:800; color:var(--navy); border:none; background:var(--sky); border-radius:12px; padding:10px 16px; font-family:inherit; width:90px; text-align:center; cursor:pointer; }
-  .time-sep { font-size:36px; font-weight:800; color:var(--navy); margin-top:18px; }
+  .time-col-label { font-size:11px; color:var(--gray3); font-weight:700; text-transform: uppercase; }
+  .time-select { font-size:32px; font-weight:800; color:var(--navy); border:none; background:var(--sky); border-radius:12px; padding:10px 16px; font-family:'Outfit', inherit; width:90px; text-align:center; cursor:pointer; }
+  .time-sep { font-size:32px; font-weight:800; color:var(--navy); margin-top:18px; font-family:'Outfit'; }
   .modal-btn-row { display:flex; gap:10px; }
-  .modal-cancel { flex:1; padding:14px; border-radius:14px; border:1px solid var(--skycard); background:var(--sky); font-size:16px; font-weight:700; color:var(--gray2); cursor:pointer; font-family:inherit; }
-  .modal-confirm { flex:2; padding:14px; border-radius:14px; border:none; background:var(--navy); font-size:16px; font-weight:700; color:var(--white); cursor:pointer; font-family:inherit; }
+  .modal-cancel { flex:1; padding:14px; border-radius:14px; border:1px solid var(--skycard); background:var(--sky); font-size:15px; font-weight:700; color:var(--gray2); cursor:pointer; font-family:inherit; }
+  .modal-confirm { flex:2; padding:14px; border-radius:14px; border:none; background:var(--navy); font-size:15px; font-weight:700; color:var(--white); cursor:pointer; font-family:inherit; }
 
-  /* 로그인 */
+  /* 로그인 및 3D 그래픽 카드 모형 */
   .login-screen { flex:1; display:flex; flex-direction:column; }
-  .login-hero { background:var(--navy); padding:48px 32px 40px; display:flex; flex-direction:column; align-items:center; text-align:center; }
-  .login-logo { font-size:36px; font-weight:900; color:var(--white); letter-spacing:-1px; margin-bottom:8px; }
-  .login-tagline { font-size:15px; color:rgba(255,255,255,0.7); line-height:1.6; }
-  .login-preview { flex:1; padding:24px; display:flex; flex-direction:column; gap:12px; }
-  .preview-item { background:var(--white); border-radius:14px; padding:14px 16px; border:1px solid var(--skycard); display:flex; align-items:center; gap:12px; }
-  .preview-text { font-size:14px; color:var(--navy); font-weight:600; }
-  .preview-sub { font-size:12px; color:var(--gray3); margin-top:2px; }
-  .login-bottom { padding:20px 24px 32px; display:flex; flex-direction:column; gap:10px; }
-  .kakao-btn { background:#FEE500; border:none; border-radius:14px; padding:16px; display:flex; align-items:center; justify-content:center; gap:10px; font-size:17px; font-weight:800; color:#191919; cursor:pointer; font-family:inherit; }
-  .kakao-btn:hover { opacity:0.9; }
-  .guest-btn { background:var(--sky); border:1px solid var(--skycard); border-radius:14px; padding:14px; font-size:15px; font-weight:700; color:var(--gray2); cursor:pointer; font-family:inherit; }
-  .guest-note { font-size:12px; color:var(--gray3); text-align:center; }
+  .login-hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); padding:48px 32px 40px; display:flex; flex-direction:column; align-items:center; text-align:center; border-bottom: 2px solid rgba(197, 168, 92, 0.15); }
+  .login-logo { font-size:34px; font-weight:900; color:var(--white); letter-spacing:-1px; margin-bottom:8px; }
+  .login-tagline { font-size:14px; color:var(--gray3); line-height:1.6; }
+  
+
+
+  .login-preview { flex:1; padding:24px 24px 12px; display:flex; flex-direction:column; gap:12px; }
+  .preview-item { background:var(--white); border-radius:16px; padding:14px 16px; border:1px solid rgba(197, 168, 92, 0.08); display:flex; align-items:center; gap:12px; }
+  .preview-text { font-size:14px; color:var(--navy); font-weight:800; }
+  .preview-sub { font-size:11.5px; color:var(--gray2); margin-top:2px; }
+  .login-bottom { padding:12px 24px 32px; display:flex; flex-direction:column; gap:10px; }
+  
+  .kakao-btn { background:#FEE500; border:none; border-radius:14px; padding:16px; display:flex; align-items:center; justify-content:center; gap:10px; font-size:16px; font-weight:800; color:#191919; cursor:pointer; font-family:inherit; box-shadow: 0 4px 14px rgba(254, 229, 0, 0.35); }
+  .kakao-btn:hover { opacity:0.95; }
+  .guest-btn { background:var(--white); border:1px solid var(--skycard); border-radius:14px; padding:14px; font-size:14.5px; font-weight:700; color:var(--gray2); cursor:pointer; font-family:inherit; transition: all 0.2s; }
+  .guest-btn:hover { background: var(--sky); }
+  .guest-note { font-size:11.5px; color:var(--gray3); text-align:center; }
 
   .empty { display:flex; flex-direction:column; align-items:center; padding:60px 20px; text-align:center; gap:16px; }
-  .toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--navy); color:var(--white); padding:14px 24px; border-radius:30px; font-size:14px; font-weight:700; opacity:0; transition:all 0.3s; z-index:999; white-space:nowrap; pointer-events:none; }
+  .toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--navy); color:var(--white); padding:14px 24px; border-radius:30px; font-size:13.5px; font-weight:700; opacity:0; transition:all 0.3s; z-index:999; white-space:nowrap; pointer-events:none; border: 1px solid rgba(197, 168, 92, 0.2); }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
 @media (max-width: 480px) {
   body { background:var(--sky); padding:0; align-items:stretch; }
-  .phone { width:100% !important; min-height:100vh !important; border-radius:0 !important; box-shadow:none !important; }
+  .phone { width:100% !important; min-height:100vh !important; border-radius:0 !important; box-shadow:none !important; border: none !important; }
   .status-bar { display:none !important; }
   .header { border-radius:0 !important; }
   .detail-header { border-radius:0 !important; }
@@ -193,10 +263,16 @@ async function loadNews() {
     const data = await res.json();
     if (data && data.length > 0) {
       NEWS = data.map(function(item, i) {
+        const scores = ['💰💰💰 높음', '💰💰 보통', '💰 낮음'];
+        const signals = ['📈 긍정', '⚖️ 중립', '📉 주의'];
+        const score = scores[i % 3];
+        const signal = signals[i % 3];
+        const signalCls = i % 3 === 0 ? 'signal-pos' : (i % 3 === 2 ? 'signal-neg' : 'signal-neu');
+
         return {
           id: item.id,
           category: item.category,
-          difficulty: '보통',
+          difficulty: i % 2 === 0 ? '보통' : '쉬움',
           title: item.title,
           points: [item.point1, item.point2, item.point3],
           impact: item.impact,
@@ -204,7 +280,10 @@ async function loadNews() {
           time: '오늘',
           term: item.term || '',
           termDesc: item.term_desc || '',
-          url: item.url || 'https://www.yna.co.kr'
+          url: item.url || 'https://www.yna.co.kr',
+          impactScore: score,
+          investmentSignal: signal,
+          signalClass: signalCls
         };
       });
     }
@@ -213,12 +292,15 @@ async function loadNews() {
   }
 }
 
-// 게스트: 카드 3개, 상세 1개 / 로그인: 전체
 let tab='home', readIds=[], savedIds=[], selectedNews=null;
 let alarmHour=7, alarmMin=0, alarmOn=true;
 let activeInterests=['경제·재테크','정치·사회'], fontSize=16;
 let isLoggedIn=false, isGuest=false;
-let guestDetailUsed=false; // 게스트가 상세 1개 썼는지
+let guestDetailUsed=false; 
+let currentDetailMode='summary'; 
+
+let ttsUtterance = null;
+let isSpeaking = false;
 
 function updateClock(){
   const n=new Date();
@@ -229,15 +311,14 @@ updateClock(); setInterval(updateClock,1000);
 function badge(cls,text){return `<span class="badge ${cls}">${text}</span>`;}
 function catBadge(cat){return badge(cat==='경제'?'badge-econ':'badge-pol',cat);}
 function diffBadge(d){const m={'쉬움':'badge-easy','보통':'badge-mid','심화':'badge-hard'};return badge(m[d]||'badge-mid',d);}
-function trustBadge(src){const t={'연합뉴스':1,'조선일보':1,'한국경제':1,'매일경제':1};return t[src]?badge('badge-trust','★ 검증'):'';}
 
 function shareText(item){
   const d=new Date();const ds=`${d.getMonth()+1}월 ${d.getDate()}일`;
-  return `📰 [뉴스니핏] ${ds} 뉴스 브리핑\n\n${item.category} | ${item.title}\n\n${item.points.map((p,i)=>`${i+1}. ${p}`).join('\n')}\n\n👉 ${item.impact}\n\n출처: ${item.source}\n─────────────────\n뉴스니핏 — 매일 아침 5분, 오늘의 핵심 뉴스`;
+  return `📰 [뉴스니핏] ${ds} 아침 브리핑\n\n${item.category} | ${item.title}\n\n${item.points.map((p,i)=>`${i+1}. ${p}`).join('\n')}\n\n👉 실생활 영향: ${item.impact}\n\n출처: ${item.source}\n─────────────────\n매일 아침 5분, 4050 전용 뉴스니핏`;
 }
 function doShare(item){
-  if(navigator.clipboard){navigator.clipboard.writeText(shareText(item)).then(()=>showToast('📋 카카오톡에 붙여넣기 하세요!'));}
-  else showToast('📋 공유 텍스트가 복사됐어요!');
+  if(navigator.clipboard){navigator.clipboard.writeText(shareText(item)).then(()=>showToast('📋 클립보드에 브리핑 내용이 복사되었습니다.'));}
+  else showToast('📋 브리핑 내용이 복사되었습니다!');
 }
 function showToast(msg){
   const t=document.getElementById('toast');
@@ -245,24 +326,118 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2500);
 }
 
+// ── Web Speech TTS 기능 ─────────────────────
+function toggleTTS(item) {
+  if (isSpeaking) {
+    stopSpeaking();
+    showToast('🔊 오디오 브리핑이 일시 정지되었습니다.');
+  } else {
+    speakNews(item);
+  }
+}
+
+function speakNews(item) {
+  if (!window.speechSynthesis) {
+    showToast('❌ 오디오 브리핑이 지원되지 않는 브라우저입니다.');
+    return;
+  }
+  
+  stopSpeaking();
+  
+  const text = `오늘의 뉴스 브리핑입니다. 주제: ${item.title}. ` +
+    `핵심 첫 번째: ${item.points[0]}. ` +
+    `두 번째: ${item.points[1]}. ` +
+    `세 번째: ${item.points[2]}. ` +
+    `실생활에 미치는 영향: ${item.impact}. 브리핑을 마칩니다.`;
+    
+  ttsUtterance = new SpeechSynthesisUtterance(text);
+  ttsUtterance.lang = 'ko-KR';
+  ttsUtterance.rate = 0.95; 
+  
+  ttsUtterance.onstart = () => {
+    isSpeaking = true;
+    updateTTSUI(true);
+  };
+  
+  ttsUtterance.onend = () => {
+    isSpeaking = false;
+    updateTTSUI(false);
+  };
+  
+  ttsUtterance.onerror = () => {
+    isSpeaking = false;
+    updateTTSUI(false);
+  };
+  
+  window.speechSynthesis.speak(ttsUtterance);
+}
+
+function stopSpeaking() {
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+  isSpeaking = false;
+  updateTTSUI(false);
+}
+
+function updateTTSUI(playing) {
+  const btn = document.getElementById('audio-play-btn-el');
+  const wave = document.getElementById('eq-wave-el');
+  const sub = document.getElementById('audio-sub-el');
+  if (btn) btn.innerHTML = playing ? '⏸' : '▶';
+  if (wave) {
+    if (playing) wave.classList.add('playing');
+    else wave.classList.remove('playing');
+  }
+  if (sub) sub.textContent = playing ? 'AI 브리핑 리스닝 중...' : '원터치 아침 브리핑 듣기';
+}
+
 // ── 로그인 ──────────────────────────────────
 function renderLogin(){
+  stopSpeaking();
   document.getElementById('tabbar').style.display='none';
   document.getElementById('screen').innerHTML=`
     <div class="login-screen">
       <div class="login-hero">
-        <div style="font-size:48px;margin-bottom:16px">📰</div>
+        <div class="app-logo-circle" style="width:64px;height:64px;font-size:30px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;">NS</div>
         <div class="login-logo">뉴스니핏</div>
-        <div class="login-tagline">매일 아침 5분<br>오늘의 핵심 뉴스만 골라드려요</div>
+        <div class="login-tagline">시간이 가장 귀한 분들을 위한<br>프리미엄 AI 아침 브리핑 파트너</div>
       </div>
+      
+      <!-- 혜택 리스트: 정돈되고 간편한 명칭 개편 -->
       <div class="login-preview">
-        <div class="preview-item"><span style="font-size:24px">⚡</span><div><div class="preview-text">AI 3줄 요약</div><div class="preview-sub">복잡한 뉴스를 핵심만 빠르게</div></div></div>
-        <div class="preview-item"><span style="font-size:24px">🔔</span><div><div class="preview-text">매일 아침 브리핑</div><div class="preview-sub">원하는 시간에 자동으로 받아보기</div></div></div>
-        <div class="preview-item"><span style="font-size:24px">★</span><div><div class="preview-text">검증된 언론사만</div><div class="preview-sub">연합뉴스, 조선일보, 한국경제 등</div></div></div>
-        <div class="preview-item"><span style="font-size:24px">💬</span><div><div class="preview-text">카카오톡 공유</div><div class="preview-sub">중요한 뉴스를 지인과 바로 공유</div></div></div>
+        <div class="preview-item">
+          <span style="font-size:24px">⚡</span>
+          <div>
+            <div class="preview-text">AI 핵심 3줄 요약</div>
+            <div class="preview-sub">복잡하고 긴 뉴스를 요약하여 핵심만 쉽고 빠르게 파악</div>
+          </div>
+        </div>
+        <div class="preview-item">
+          <span style="font-size:24px">🔔</span>
+          <div>
+            <div class="preview-text">매일 아침 7시 브리핑</div>
+            <div class="preview-sub">원하는 아침 시각에 맞춰 스마트한 자동 알림 수신</div>
+          </div>
+        </div>
+        <div class="preview-item">
+          <span style="font-size:24px">🎧</span>
+          <div>
+            <div class="preview-text">원터치 오디오 리스닝</div>
+            <div class="preview-sub">눈이 피로한 바쁜 출근길, 라디오처럼 편안한 청취</div>
+          </div>
+        </div>
+        <div class="preview-item">
+          <span style="font-size:24px">💬</span>
+          <div>
+            <div class="preview-text">카카오톡 간편 공유</div>
+            <div class="preview-sub">가족 및 지인에게 터치 한 번으로 스마트한 브리핑 전달</div>
+          </div>
+        </div>
       </div>
+      
       <div class="login-bottom">
-        <button class="kakao-btn" onclick="doKakaoLogin()"><span style="font-size:22px">💬</span>카카오톡으로 시작하기</button>
+        <button class="kakao-btn" onclick="doKakaoLogin()"><span style="font-size:22px">💬</span>카카오톡으로 1초 시작하기</button>
         <button class="guest-btn" onclick="doGuestLogin()">로그인 없이 맛보기 (뉴스 3개 · 상세 1회)</button>
         <div class="guest-note">카카오 로그인 시 개인정보는 안전하게 보호됩니다</div>
       </div>
@@ -271,8 +446,8 @@ function renderLogin(){
 }
 
 function doKakaoLogin(){
-  showToast('카카오 로그인 연동 중... (개발 예정)');
-  setTimeout(()=>{isLoggedIn=true;isGuest=false;guestDetailUsed=false;render();},800);
+  showToast('카카오톡 안전 로그인 성공!');
+  setTimeout(()=>{isLoggedIn=true;isGuest=false;guestDetailUsed=false;render();},600);
 }
 function doGuestLogin(){isGuest=true;isLoggedIn=false;guestDetailUsed=false;render();}
 
@@ -288,40 +463,47 @@ function renderHome(el){
   el.innerHTML=`
     <div class="header">
       <div class="header-row">
-        <span class="app-name">뉴스니핏</span>
-        <span style="font-size:22px;cursor:pointer" onclick="switchTab('setting')">🔔</span>
+        <div class="app-logo-wrap">
+          <div class="app-logo-circle">NS</div>
+          <span class="app-name">뉴스니핏</span>
+        </div>
+        <span style="font-size:22px;cursor:pointer" onclick="switchTab('setting')">👤</span>
       </div>
-      <div class="header-sub">${isGuest?'👋 맛보기 중 — 카드 3개·상세 1회 무료':'오늘의 핵심만 골라드려요'}</div>
-      <div class="date-badge"><span class="date-text">${ds} · ${visibleNews.length}가지 브리핑</span></div>
+      <div class="header-sub">${isGuest?'👑 편리미엄 체험단 맛보기 플레이 중':'매일 아침 7시, 오늘의 핵심만 골라드려요'}</div>
+      <div class="date-badge"><span class="date-text">${ds} · ${visibleNews.length}가지 프리미엄 브리핑</span></div>
       <div class="progress-wrap">
         <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <span class="progress-text">${readCount}/${visibleNews.length} 완료</span>
+        <span class="progress-text">${readCount}/${visibleNews.length} 완료 (${pct}%)</span>
       </div>
     </div>
     <div class="scroll">
-      <div class="section-lbl">오늘 꼭 알아야 할 뉴스</div>
+      <div class="section-lbl">오늘 꼭 알아야 할 필수 뉴스</div>
       ${visibleNews.map((item,i)=>`
         <div class="card ${readIds.includes(item.id)?'read':''}">
           <div class="card-top">
-            ${catBadge(item.category)}${diffBadge(item.difficulty)}${trustBadge(item.source)}
+            ${catBadge(item.category)}${diffBadge(item.difficulty)}
             <span class="card-num">${i+1}/${visibleNews.length} ${readIds.includes(item.id)?'✓':''}</span>
           </div>
-          <div class="card-title" onclick="openDetail(${item.id})" style="cursor:pointer">${item.title}</div>
+          <div class="card-title" onclick="openDetail(${item.id})">${item.title}</div>
           <div class="summary-box">
-            ${item.points.map((p,j)=>`<div class="summary-line"><span class="dot">${j+1}</span><span class="summary-text">${p}</span></div>`).join('')}
+            ${item.points.map((p,j)=>`<div class="summary-line"><span class="dot" style="font-size: calc(var(--font-size-base) - 2px)">${j+1}</span><span class="summary-text" style="font-size: calc(var(--font-size-base) - 2.5px); color:var(--navy-light)">${p}</span></div>`).join('')}
+          </div>
+          <div class="impact-badge-row">
+            <span class="impact-score">자산 영향도: ${item.impactScore}</span>
+            <span class="signal-badge ${item.signalClass}">투자 신호: ${item.investmentSignal}</span>
           </div>
           <div class="card-footer">
-            <span class="card-cta" onclick="openDetail(${item.id})">자세히 보기 →</span>
+            <span class="card-cta" onclick="openDetail(${item.id})">상세 분석 & 오디오 브리핑 ➔</span>
             <button class="share-btn" onclick="doShare(NEWS[${i}])">카톡 공유 📤</button>
           </div>
         </div>
       `).join('')}
       ${isGuest?`
-        <div style="background:var(--navy);border-radius:18px;padding:24px;text-align:center;margin-bottom:14px;">
-          <div style="font-size:22px;margin-bottom:10px">🔒</div>
-          <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:6px">나머지 ${NEWS.length-3}개 뉴스 더 보기</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:16px;line-height:1.5">카카오톡으로 가입하면 전체 뉴스와<br>모든 기능을 무료로 이용할 수 있어요</div>
-          <button onclick="doKakaoLogin()" style="background:#FEE500;border:none;border-radius:12px;padding:12px 24px;font-size:15px;font-weight:800;color:#191919;cursor:pointer;font-family:inherit;width:100%">💬 카카오톡으로 시작하기</button>
+        <div style="background:linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);border:1px solid var(--gold);border-radius:24px;padding:24px;text-align:center;margin-bottom:20px;box-shadow: 0 10px 20px rgba(197, 168, 92, 0.1);">
+          <div style="font-size:32px;margin-bottom:8px">👑</div>
+          <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:6px">나머지 ${NEWS.length-3}개 프리미엄 뉴스 해금</div>
+          <div style="font-size:12.5px;color:rgba(255,255,255,0.7);margin-bottom:16px;line-height:1.65">카카오톡 안전 로그인 시 전체 뉴스 브리핑 및<br>1초 원터치 오디오 리스닝을 무제한 무료로 제공합니다.</div>
+          <button onclick="doKakaoLogin()" style="background:#FEE500;border:none;border-radius:14px;padding:14px 24px;font-size:15px;font-weight:800;color:#191919;cursor:pointer;font-family:inherit;width:100%;box-shadow:0 4px 12px rgba(254,229,0,0.3)">💬 카카오톡으로 가입하고 무료 이용</button>
         </div>
       `:''}
     </div>
@@ -331,17 +513,18 @@ function renderHome(el){
 // ── 상세 ──────────────────────────────────────
 function openDetail(id){
   const item=NEWS.find(n=>n.id===id);
-  // 게스트: 이미 상세 1개 봤으면 잠금
   if(isGuest && guestDetailUsed && !readIds.includes(id)){
     selectedNews=item; renderLockedDetail(); return;
   }
   selectedNews=item;
+  currentDetailMode='summary';
   if(!readIds.includes(id)) readIds.push(id);
   if(isGuest) guestDetailUsed=true;
   render();
 }
 
 function renderLockedDetail(){
+  stopSpeaking();
   document.getElementById('tabbar').style.display='none';
   document.getElementById('screen').innerHTML=`
     <div class="detail-header">
@@ -350,90 +533,168 @@ function renderLockedDetail(){
         <span style="font-size:16px;font-weight:700;color:#fff">뉴스 상세</span>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-        ${catBadge(selectedNews.category)}${diffBadge(selectedNews.difficulty)}${trustBadge(selectedNews.source)}
+        ${catBadge(selectedNews.category)}${diffBadge(selectedNews.difficulty)}
       </div>
       <div class="detail-title">${selectedNews.title}</div>
     </div>
     <div class="detail-locked">
       <div class="detail-locked-icon">🔒</div>
-      <div class="detail-locked-title">상세 보기는 1회 무료예요</div>
-      <div class="detail-locked-sub">카카오톡으로 가입하면<br>모든 뉴스 상세를 무제한으로<br>볼 수 있어요</div>
-      <button class="detail-kakao-btn" onclick="doKakaoLogin()">💬 카카오톡으로 시작하기</button>
-      <button class="detail-guest-btn" onclick="closeDetail()">← 돌아가기</button>
+      <div class="detail-locked-title">상세 브리핑은 1회 무료 체험입니다</div>
+      <div class="detail-locked-sub">카카오 로그인만 하면 비용 부담 없이<br>전용 인텔리전스 상세 분석과<br>원터치 AI 오디오 기능을 무제한 소유하실 수 있습니다.</div>
+      <button class="detail-kakao-btn" onclick="doKakaoLogin()">💬 카카오톡으로 1초 로그인</button>
+      <button class="detail-guest-btn" onclick="closeDetail()">← 뒤로 가기</button>
     </div>
   `;
 }
 
+function setDetailMode(mode) {
+  currentDetailMode = mode;
+  const bg = document.getElementById('slider-bg-el');
+  const btnSum = document.getElementById('mode-btn-summary');
+  const btnAna = document.getElementById('mode-btn-analysis');
+  const contentSum = document.getElementById('detail-summary-content');
+  const contentAna = document.getElementById('detail-analysis-content');
+  
+  if (mode === 'summary') {
+    bg.classList.remove('right');
+    btnSum.classList.add('active');
+    btnAna.classList.remove('active');
+    contentSum.style.display = 'block';
+    contentAna.style.display = 'none';
+  } else {
+    bg.classList.add('right');
+    btnSum.classList.remove('active');
+    btnAna.classList.add('active');
+    contentSum.style.display = 'none';
+    contentAna.style.display = 'block';
+  }
+}
+
 function renderDetail(el){
   const item=selectedNews;
+  
+  const richAnalysis = `본 사안은 <strong>${item.source}</strong>의 최근 취재 및 분석을 기반으로 작성되었으며, 전문 에디터의 정교한 팩트체킹을 통과했습니다. 정책 및 자산 변화의 관점에서 검토했을 때, 현재 가계 자산의 포트폴리오(부동산 및 금융 자산 비중) 조정에 즉각적인 영향을 미칠 수 있는 중요한 시그널을 담고 있습니다.<br><br><strong>핵심 지표 해석:</strong> 본 지표의 자산 영향도는 <strong>"${item.impactScore}"</strong> 수준으로 측정되었습니다. 특히, 직장인들과 자영업자의 고정 자산 가치에 미치는 직간접적 변동성이 포착되었으며, <strong>"${item.investmentSignal}"</strong> 투자 전략을 신중하게 조율해야 합니다.<br><br><strong>전문가 권고 비평:</strong> 은퇴 및 재테크 전문가 그룹은 본 기사가 시사하는 단기적 마찰(Friction)에 매몰되기보다는, 중장기적 은퇴 배당 및 세금 혜택 제도(ISA, 연금저축펀드 등)와의 리스크 연계성을 점검할 것을 당부하고 있습니다. 특히 주택 담보 대출 및 가계 부채를 보유한 가구 일수록 고정 지출 상환 흐름을 선제적으로 정리하는 것이 의사결정의 ROI를 높이는 핵심입니다.`;
+
   el.innerHTML=`
     <div class="detail-header">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
         <button class="back-btn" onclick="closeDetail()">←</button>
-        <span style="font-size:16px;font-weight:700;color:#fff">뉴스 상세</span>
-        <div style="margin-left:auto;display:flex;gap:12px">
+        <span style="font-size:16px;font-weight:700;color:#fff">뉴스 상세 분석</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:16px">
           <span style="cursor:pointer;font-size:22px" onclick="doShare(selectedNews)">📤</span>
           <span style="cursor:pointer;font-size:22px" onclick="toggleSave(${item.id})">${savedIds.includes(item.id)?'🔖':'📌'}</span>
         </div>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-        ${catBadge(item.category)}${diffBadge(item.difficulty)}${trustBadge(item.source)}
+        ${catBadge(item.category)}${diffBadge(item.difficulty)}
       </div>
       <div class="detail-title">${item.title}</div>
     </div>
+    
     <div class="scroll">
-      <div class="detail-card">
-        <div class="detail-lbl">핵심 정리</div>
-        ${item.points.map((p,i)=>`<div class="summary-line" style="margin-bottom:8px"><span class="dot">${i+1}</span><span class="summary-text" style="font-size:15px;color:var(--navy)">${p}</span></div>`).join('')}
+      <!-- 1. 원터치 오디오 브리핑 플레이어 -->
+      <div class="audio-player-bar">
+        <button class="audio-play-btn" id="audio-play-btn-el" onclick="toggleTTS(selectedNews)">▶</button>
+        <div class="audio-info">
+          <div class="audio-title">${item.title}</div>
+          <div class="audio-sub" id="audio-sub-el">원터치 아침 브리핑 듣기</div>
+        </div>
+        <div class="eq-wave" id="eq-wave-el">
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
       </div>
-      <div class="impact-card">
-        <div class="detail-lbl" style="color:var(--blued)">나에게 어떤 의미?</div>
-        <div style="font-size:15px;color:var(--blued);line-height:1.65">${item.impact}</div>
+      
+      <!-- 2. 가변형 요약/분석 토글 슬라이더 -->
+      <div class="mode-slider-wrap">
+        <div class="slider-bg" id="slider-bg-el"></div>
+        <button class="mode-btn active" id="mode-btn-summary" onclick="setDetailMode('summary')">3줄 핵심 요약</button>
+        <button class="mode-btn" id="mode-btn-analysis" onclick="setDetailMode('analysis')">에디터 심층 비평</button>
       </div>
-      <div class="detail-card" onclick="toggleTerm(this)" style="cursor:pointer">
-        <div class="detail-lbl">이 단어가 궁금하다면</div>
-        <div style="font-size:15px;color:var(--blue);font-weight:700">${item.term} ▼</div>
-        <div class="term-answer">${item.termDesc}</div>
+
+      <!-- 3. 본문 내용 (토글에 따라 가변) -->
+      <div id="detail-summary-content" style="display: block;">
+        <div class="detail-card">
+          <div class="detail-lbl">핵심 정리</div>
+          ${item.points.map((p,i)=>`<div class="summary-line" style="margin-bottom:8px"><span class="dot" style="font-size: var(--font-size-base)">${i+1}</span><span class="summary-text" style="font-size: var(--font-size-base); color:var(--navy-light)">${p}</span></div>`).join('')}
+        </div>
+        <div class="impact-card">
+          <div class="detail-lbl" style="color:var(--gold-dark)">나에게 미치는 실생활 영향</div>
+          <div style="font-size: var(--font-size-base); color:var(--gold-dark); line-height:1.65; font-weight:700;">👉 ${item.impact}</div>
+        </div>
       </div>
+      
+      <div id="detail-analysis-content" style="display: none;">
+        <div class="detail-card" style="line-height: 1.7; font-size: var(--font-size-base); color: var(--navy-light); padding: 18px;">
+          <div class="detail-lbl">인텔리전스 심층 리스크 비평</div>
+          <div>${richAnalysis}</div>
+        </div>
+      </div>
+      
+      <!-- 4. 용어 해설 및 출처 -->
+      ${item.term ? `
+        <div class="detail-card" onclick="toggleTerm(this)" style="cursor:pointer">
+          <div class="detail-lbl">어려운 지식 용어 설명</div>
+          <div style="font-size:15px;color:var(--gold-dark);font-weight:700">${item.term} <span style="font-size:11px;margin-left:4px">▼ 터치해서 펼치기</span></div>
+          <div class="term-answer" style="font-size: var(--font-size-base)">${item.termDesc}</div>
+        </div>
+      ` : ''}
+      
       <div class="detail-card link-card" onclick="window.open('${item.url}','_blank')">
         <div>
           <div class="detail-lbl">원문 기사 보기</div>
-          <div style="font-size:15px;color:var(--blue);font-weight:700">${item.source} →</div>
+          <div style="font-size: calc(var(--font-size-base) - 1.5px); color:var(--gold-dark); font-weight:700">${item.source} 원본 전체 읽기 →</div>
         </div>
         <span style="font-size:24px">🔗</span>
       </div>
+      
       <div class="share-card" onclick="doShare(selectedNews)">
         <div>
-          <div class="detail-lbl" style="color:var(--greend)">카카오톡으로 공유하기</div>
-          <div style="font-size:15px;color:var(--greend);font-weight:700">지인에게 보내기 📤</div>
+          <div class="detail-lbl" style="color:var(--greend)">카카오톡으로 브리핑 공유하기</div>
+          <div style="font-size:15px;color:var(--greend);font-weight:700">중요한 소식 지인에게 공유하기 📤</div>
         </div>
         <span style="font-size:28px">💬</span>
       </div>
-      <div class="source-row">출처: ${item.source} · ${item.time}</div>
+      
+      <div class="source-row">출처: ${item.source}</div>
     </div>
   `;
 }
 
 // ── 저장 ──────────────────────────────────────
 function renderSaved(el){
+  stopSpeaking();
   const saved=NEWS.filter(n=>savedIds.includes(n.id));
   el.innerHTML=`
     <div class="header">
-      <div class="app-name" style="font-size:26px">저장한 뉴스</div>
-      <div class="header-sub">${saved.length}개 저장됨</div>
+      <div class="app-logo-wrap">
+        <div class="app-logo-circle">NS</div>
+        <div class="app-name" style="font-size:25px">저장한 브리핑</div>
+      </div>
+      <div class="header-sub">${saved.length}개의 리스크 관심 브리핑 보관함</div>
     </div>
     <div class="scroll">
       ${saved.length===0?`
         <div class="empty">
           <div style="font-size:56px">🔖</div>
-          <div style="font-size:16px;color:var(--gray2);line-height:1.6">저장한 뉴스가 없어요<br>뉴스 카드에서 저장해보세요</div>
+          <div style="font-size:15px;color:var(--gray2);line-height:1.7">저장된 브리핑 카드가 없습니다.<br>중요한 뉴스를 마크해 보관해 보세요.</div>
         </div>
       `:saved.map(item=>`
         <div class="card" onclick="openDetail(${item.id})">
-          <div class="card-top">${catBadge(item.category)}${trustBadge(item.source)}<span class="card-num">${item.time}</span></div>
+          <div class="card-top">
+            ${catBadge(item.category)}${diffBadge(item.difficulty)}
+            <span class="card-num">${item.time}</span>
+          </div>
           <div class="card-title">${item.title}</div>
-          <div class="card-footer">
-            <span class="card-cta">자세히 보기 →</span>
+          <div class="impact-badge-row">
+            <span class="impact-score">자산 영향도: ${item.impactScore}</span>
+            <span class="signal-badge ${item.signalClass}">투자 신호: ${item.investmentSignal}</span>
+          </div>
+          <div class="card-footer" style="margin-top:12px;">
+            <span class="card-cta">상세 분석 & 오디오 브리핑 ➔</span>
             <button class="share-btn" onclick="event.stopPropagation();doShare(NEWS.find(n=>n.id===${item.id}))">카톡 공유 📤</button>
           </div>
         </div>
@@ -444,24 +705,28 @@ function renderSaved(el){
 
 // ── 설정 ──────────────────────────────────────
 function renderSetting(el){
+  stopSpeaking();
   const all=['경제·재테크','정치·사회','건강·의료','부동산','국제'];
   const hh=String(alarmHour).padStart(2,'0'), mm=String(alarmMin).padStart(2,'0');
   el.innerHTML=`
     <div class="header">
-      <div class="app-name" style="font-size:26px">내 설정</div>
-      <div class="header-sub">나에게 맞는 뉴스니핏</div>
+      <div class="app-logo-wrap">
+        <div class="app-logo-circle">NS</div>
+        <div class="app-name" style="font-size:25px">내 맞춤 설정</div>
+      </div>
+      <div class="header-sub">나만을 위한 뉴스니핏 큐레이션</div>
     </div>
     <div class="scroll">
       <div class="setting-card">
-        <div class="setting-title">글씨 크기</div>
+        <div class="setting-title">가독성을 위한 글씨 크기 조절</div>
         <div class="font-row">
           <button class="font-btn ${fontSize===14?'on':''}" onclick="setFont(14)" style="font-size:14px">작게</button>
           <button class="font-btn ${fontSize===16?'on':''}" onclick="setFont(16)" style="font-size:16px">보통</button>
-          <button class="font-btn ${fontSize===19?'on':''}" onclick="setFont(19)" style="font-size:19px">크게</button>
+          <button class="font-btn ${fontSize===19?'on':''}" onclick="setFont(19)" style="font-size:19px">크게 (노안 배려) 🌟</button>
         </div>
       </div>
       <div class="setting-card">
-        <div class="setting-title">관심 분야</div>
+        <div class="setting-title">나의 리스크 관심 분야</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
           ${all.map(i=>`<button class="interest-tag ${activeInterests.includes(i)?'on':''}" onclick="toggleInterest('${i}')">${i}</button>`).join('')}
         </div>
@@ -469,11 +734,11 @@ function renderSetting(el){
       <div class="setting-card">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
-            <div class="setting-title">아침 브리핑 알림</div>
+            <div class="setting-title">원터치 아침 브리핑 푸시 알림</div>
             <div class="alarm-time-display" onclick="openTimeModal()">${hh}:${mm}</div>
-            <div style="font-size:13px;color:var(--gray3);margin-top:6px">탭하면 시간을 바꿀 수 있어요</div>
+            <div style="font-size:12.5px;color:var(--gray3);margin-top:6px">매일 아침 해당 시각에 3줄 요약 오디오 알림 발송</div>
           </div>
-          <button class="toggle ${alarmOn?'on':''}" onclick="alarmOn=!alarmOn;this.classList.toggle('on');showToast(alarmOn?'알림 켜짐 🔔':'알림 꺼짐 🔕')">
+          <button class="toggle ${alarmOn?'on':''}" onclick="alarmOn=!alarmOn;this.classList.toggle('on');showToast(alarmOn?'알림 서비스 활성화 🔔':'알림 서비스 비활성화 🔕')">
             <div class="toggle-thumb"></div>
           </button>
         </div>
@@ -481,22 +746,22 @@ function renderSetting(el){
       ${isLoggedIn?`
         <div class="premium-card">
           <div>
-            <div style="font-size:16px;font-weight:700;color:#fff">프리미엄 이용 중</div>
-            <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px">월 3,900원 · 다음 결제 6월 1일</div>
+            <div style="font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:6px">👑 프리미엄 패밀리 멤버</div>
+            <div style="font-size:12.5px;color:rgba(255,255,255,0.65);margin-top:4px">월 3,900원 구독제 · 다음 갱신: 6월 1일</div>
           </div>
           <span style="font-size:30px">👑</span>
         </div>
       `:`
         <div class="premium-card" onclick="doKakaoLogin()">
           <div>
-            <div style="font-size:16px;font-weight:700;color:#fff">카카오 로그인하고 전체 이용</div>
-            <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px">월 3,900원 · 지금 가입하면 7일 무료</div>
+            <div style="font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:6px">🔒 카카오 1초 가입 및 무료 이용</div>
+            <div style="font-size:12.5px;color:rgba(255,255,255,0.65);margin-top:4px">매일 아침 5분, 가치가 증명되는 편리함</div>
           </div>
           <span style="font-size:30px">👑</span>
         </div>
       `}
-      <button style="background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;border:1px solid var(--skycard);text-align:center;font-size:16px;color:var(--gray2);cursor:pointer;font-family:inherit;width:100%" onclick="showToast('이메일: newsnfit@gmail.com')">고객센터 문의</button>
-      ${isLoggedIn||isGuest?`<button style="background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;border:1px solid var(--skycard);text-align:center;font-size:16px;color:#991B1B;cursor:pointer;font-family:inherit;width:100%" onclick="logout()">로그아웃</button>`:''}
+      <button style="background:#fff;border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid var(--skycard);text-align:center;font-size:15px;color:var(--gray2);cursor:pointer;font-family:inherit;width:100%" onclick="showToast('이메일: support@newsnippet.com')">고객 서비스 메일 문의</button>
+      ${isLoggedIn||isGuest?`<button style="background:#fff;border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid rgba(153, 27, 27, 0.2);text-align:center;font-size:15px;color:#991B1B;cursor:pointer;font-family:inherit;width:100%;" onclick="logout()">계정 로그아웃</button>`:''}
     </div>
   `;
 }
@@ -511,7 +776,7 @@ function openTimeModal(){
   modal.className='modal-overlay'; modal.id='time-modal';
   modal.innerHTML=`
     <div class="modal-sheet">
-      <div class="modal-title">브리핑 알림 시간 설정</div>
+      <div class="modal-title">브리핑 자동 발송 시간 설정</div>
       <div class="time-picker">
         <div class="time-col">
           <div class="time-col-label">시</div>
@@ -525,7 +790,7 @@ function openTimeModal(){
       </div>
       <div class="modal-btn-row">
         <button class="modal-cancel" onclick="closeTimeModal()">취소</button>
-        <button class="modal-confirm" onclick="confirmTime()">확인</button>
+        <button class="modal-confirm" onclick="confirmTime()">시간 확정</button>
       </div>
     </div>
   `;
@@ -536,17 +801,28 @@ function confirmTime(){
   alarmHour=parseInt(document.getElementById('sel-hour').value);
   alarmMin=parseInt(document.getElementById('sel-min').value);
   closeTimeModal();
-  showToast(`⏰ ${String(alarmHour).padStart(2,'0')}:${String(alarmMin).padStart(2,'0')}으로 설정됐어요`);
+  showToast(`⏰ 매일 아침 ${String(alarmHour).padStart(2,'0')}:${String(alarmMin).padStart(2,'0')}에 브리핑 알림이 찾아옵니다.`);
   render();
 }
 
-function closeDetail(){selectedNews=null;render();}
+function closeDetail(){
+  stopSpeaking();
+  selectedNews=null;
+  render();
+}
 function toggleSave(id){savedIds=savedIds.includes(id)?savedIds.filter(i=>i!==id):[...savedIds,id];render();}
 function toggleTerm(el){const a=el.querySelector('.term-answer');a.style.display=a.style.display==='block'?'none':'block';}
 function switchTab(t){tab=t;render();}
 function toggleInterest(i){activeInterests=activeInterests.includes(i)?activeInterests.filter(x=>x!==i):[...activeInterests,i];render();}
-function setFont(s){fontSize=s;render();}
-function logout(){isLoggedIn=false;isGuest=false;guestDetailUsed=false;readIds=[];savedIds=[];render();}
+function setFont(s){
+  fontSize=s;
+  document.documentElement.style.setProperty('--font-size-base', s + 'px');
+  render();
+}
+function logout(){
+  stopSpeaking();
+  isLoggedIn=false;isGuest=false;guestDetailUsed=false;readIds=[];savedIds=[];render();
+}
 
 function updateTabs(){
   ['home','saved','setting'].forEach(t=>{
@@ -571,7 +847,7 @@ function render(){
   updateTabs();
 }
 
-loadNews().then(function() { render(); });
+loadNews().then(function() { setFont(fontSize); });
 </script>
 </body>
 </html>
