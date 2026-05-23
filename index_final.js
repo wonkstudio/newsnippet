@@ -10,7 +10,6 @@ const CONFIG = {
   RETRY_DELAY: 30000,
 };
 
-// 주요뉴스 RSS로 변경 + 더 많이 가져와서 필터링
 const RSS_FEEDS = [
   { name: '연합뉴스_주요', url: 'https://www.yna.co.kr/rss/top-news.xml', category: '주요' },
   { name: '연합뉴스_경제', url: 'https://www.yna.co.kr/rss/economy.xml', category: '경제' },
@@ -56,7 +55,7 @@ function parseRSS(xml, category) {
         url: link || 'https://www.yna.co.kr'
       });
     }
-    if (items.length >= 5) break; // 피드별 5개씩 가져와서 필터링
+    if (items.length >= 5) break;
   }
   return items;
 }
@@ -74,7 +73,6 @@ async function collectNews() {
       console.log('  ✗ ' + feed.name + ': 실패');
     }
   }
-  // 중복 제거
   const unique = allNews.filter(function(v, i, a) {
     return a.findIndex(function(t) { return t.title === v.title; }) === i;
   });
@@ -82,7 +80,6 @@ async function collectNews() {
   return unique;
 }
 
-// Gemini가 40-50대에게 중요한 뉴스 5개 선별
 async function filterImportantNews(newsItems) {
   const titles = newsItems.map(function(n, i) { return (i+1) + '. ' + n.title; }).join('\n');
   const prompt = 'You are a news curator for Korean people aged 40-60 (middle-aged workers and self-employed).\n' +
@@ -226,14 +223,96 @@ async function summarizeNews(newsItems) {
   return summarized;
 }
 
-async function saveToSupabase(newsItems) {
-  console.log('\n💾 Supabase 저장 중...');
-  await new Promise((resolve) => {
-    const today = new Date().toISOString().slice(0, 10);
+// ── 기존 뉴스 아카이브로 이동 ──────────────────
+async function archiveOldNews() {
+  console.log('\n📦 기존 뉴스 아카이브 이동 중...');
+  const today = new Date().toISOString().slice(0, 10);
+
+  // 1. 기존 뉴스 가져오기
+  const existing = await new Promise((resolve) => {
     const url = new URL(CONFIG.SUPABASE_URL + '/rest/v1/news');
     const options = {
       hostname: url.hostname,
-      path: url.pathname + '?created_at=gte.' + today,
+      path: url.pathname + '?select=*',
+      method: 'GET',
+      headers: {
+        'apikey': CONFIG.SUPABASE_KEY,
+        'Authorization': 'Bearer ' + CONFIG.SUPABASE_KEY
+      }
+    };
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch(e) { resolve([]); }
+      });
+    });
+    req.on('error', () => resolve([]));
+    req.end();
+  });
+
+  if (!existing || existing.length === 0) {
+    console.log('  아카이브할 뉴스 없음');
+    return;
+  }
+
+  // 2. 아카이브 테이블에 저장
+  const archiveItems = existing.map(function(n) {
+    return {
+      category: n.category,
+      title: n.title,
+      headline: n.headline,
+      point1: n.point1,
+      point2: n.point2,
+      point3: n.point3,
+      impact: n.impact,
+      source: n.source,
+      url: n.url,
+      term: n.term,
+      term_desc: n.term_desc,
+      briefing_date: n.created_at ? n.created_at.slice(0, 10) : today
+    };
+  });
+
+  const archiveBody = JSON.stringify(archiveItems);
+  await new Promise((resolve) => {
+    const url = new URL(CONFIG.SUPABASE_URL + '/rest/v1/news_archive');
+    const options = {
+      hostname: url.hostname,
+      path: url.pathname,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': CONFIG.SUPABASE_KEY,
+        'Authorization': 'Bearer ' + CONFIG.SUPABASE_KEY,
+        'Prefer': 'return=minimal',
+        'Content-Length': Buffer.byteLength(archiveBody)
+      }
+    };
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        if (res.statusCode === 201) {
+          console.log('  ✓ ' + archiveItems.length + '건 아카이브 완료');
+        } else {
+          console.log('  ✗ 아카이브 실패: ' + data);
+        }
+        resolve();
+      });
+    });
+    req.on('error', resolve);
+    req.write(archiveBody);
+    req.end();
+  });
+
+  // 3. 기존 뉴스 삭제
+  await new Promise((resolve) => {
+    const url = new URL(CONFIG.SUPABASE_URL + '/rest/v1/news');
+    const options = {
+      hostname: url.hostname,
+      path: url.pathname + '?id=gte.0',
       method: 'DELETE',
       headers: {
         'apikey': CONFIG.SUPABASE_KEY,
@@ -242,11 +321,19 @@ async function saveToSupabase(newsItems) {
     };
     const req = https.request(options, (res) => {
       res.on('data', function() {});
-      res.on('end', resolve);
+      res.on('end', () => {
+        console.log('  ✓ 기존 뉴스 삭제 완료');
+        resolve();
+      });
     });
     req.on('error', resolve);
     req.end();
   });
+}
+
+// ── 새 뉴스 저장 ──────────────────
+async function saveToSupabase(newsItems) {
+  console.log('\n💾 Supabase 저장 중...');
 
   for (const news of newsItems) {
     const body = JSON.stringify({
@@ -319,7 +406,6 @@ async function runBriefing() {
   try {
     const allNews = await collectNews();
     if (allNews.length === 0) { console.log('❌ 뉴스 없음'); return; }
-    // Gemini로 중요 뉴스 필터링
     const filtered = await filterImportantNews(allNews);
     console.log('\n✅ 총 ' + filtered.length + '건 선별 완료');
     const summary = await summarizeNews(filtered);
@@ -328,6 +414,7 @@ async function runBriefing() {
     console.log('----------------------------------------');
     console.log(message);
     console.log('----------------------------------------');
+    await archiveOldNews();
     await saveToSupabase(summary);
     console.log('\n✅ 완료!');
   } catch (e) {
