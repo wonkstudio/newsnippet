@@ -533,19 +533,17 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
           <Badge category={item.category} />
           <Badge difficulty={item.difficulty || '보통'} />
-          <Text style={{ fontSize: fontSize - 6, color: 'rgba(255, 255, 255, 0.65)', fontWeight: '700', marginLeft: 4, lineHeight: (fontSize - 6) * 1.3 }}>
+          <Text style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.65)', fontWeight: '700', marginLeft: 4 }}>
             {dateStr}
           </Text>
         </View>
-
-        <Text style={{ fontSize: titleSize, color: C.white, fontWeight: '900', lineHeight: titleSize * 1.35, marginTop: 4 }}>
+        <Text style={{ fontSize: titleSize, color: C.white, fontWeight: '900', lineHeight: titleSize * 1.35, marginBottom: 16 }}>
           {item.title}
         </Text>
       </LinearGradient>
 
       <ScrollView style={[s.scroll, { backgroundColor: C.bg }]} contentContainerStyle={{ paddingBottom: 40 }}>
         <AudioPlayerBar item={item} fontSize={fontSize} />
-
         <View style={{ paddingHorizontal: 20 }}>
           {isGuest && guestDetailUsed ? (
             <View style={{ paddingVertical: 60, alignItems: 'center' }}>
@@ -574,14 +572,14 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
                   style={s.tabBtn}
                   activeOpacity={0.8}
                 >
-                  <Text style={[s.tabBtnText, { fontSize: fontSize - 1, lineHeight: (fontSize - 1) * 1.35 }, activeTab === 'summary' && s.tabBtnTextActive]}>3줄 핵심 요약</Text>
+                  <Text style={[s.tabBtnText, { fontSize: 23, lineHeight: (fontSize - 1) * 1.35 }, activeTab === 'summary' && s.tabBtnTextActive]}>3줄 핵심 요약</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => setActiveTab('critic')}
                   style={s.tabBtn}
                   activeOpacity={0.8}
                 >
-                  <Text style={[s.tabBtnText, { fontSize: fontSize - 1, lineHeight: (fontSize - 1) * 1.35 }, activeTab === 'critic' && s.tabBtnTextActive]}>에디터 심층 비평</Text>
+                  <Text style={[s.tabBtnText, { fontSize: 23, lineHeight: (fontSize - 3) * 1.35 }, activeTab === 'critic' && s.tabBtnTextActive]} numberOfLines={1} adjustsFontSizeToFit>에디터 심층 비평</Text>
                 </TouchableOpacity>
               </View>
 
@@ -630,12 +628,10 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
                       <View style={s.expertAvatar}>
                         <Text style={{ fontSize: 28 }}>🤖</Text>
                       </View>
-                      <View style={{ flex: 1 }}>
-                        <Text style={[s.expertName, { fontSize: fontSize - 1, color: C.text, lineHeight: (fontSize - 1) * 1.35 }]}>뉴스니핏 AI 비평 엔진</Text>
-                        <Text style={[s.expertTitle, { fontSize: fontSize - 4, color: C.textSub, lineHeight: (fontSize - 4) * 1.35 }]}>실시간 금융 변수 예측 및 시장 가치 판단 모델</Text>
-                      </View>
-                      <View style={s.expertRating}>
-                        <Text style={{ fontSize: fontSize - 4, color: C.gold, lineHeight: (fontSize - 4) * 1.35 }}>⭐️ 신뢰도 99%</Text>
+                      <View style={{ flex: 1, minWidth: 0 }}>
+                        <Text style={[s.expertName, { fontSize: fontSize - 1, color: C.text, lineHeight: (fontSize - 1) * 1.35 }]} numberOfLines={2}>뉴스니핏 AI 비평 엔진</Text>
+                        <Text style={[s.expertTitle, { fontSize: fontSize - 4, color: C.textSub, lineHeight: (fontSize - 4) * 1.35 }]} numberOfLines={2}>실시간 금융 변수 예측 및 시장 가치 판단 모델</Text>
+                        <Text style={{ fontSize: fontSize - 4, color: C.gold, lineHeight: (fontSize - 4) * 1.35, marginTop: 4 }}>⭐️ 신뢰도 99%</Text>
                       </View>
                     </View>
 
@@ -991,10 +987,8 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
               colors={[C.navy, C.navyLight]}
               style={s.premiumCardStyle}
             >
-              <View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <Text style={{ fontSize: fontSize - 2, fontWeight: '900', color: C.white, lineHeight: (fontSize - 2) * 1.35 }}>👑 프리미엄 패밀리 멤버</Text>
-                </View>
+              <View style={{ flex: 1, marginRight: 8 }}>
+                <Text style={{ fontSize: fontSize - 2, fontWeight: '900', color: C.white, lineHeight: (fontSize - 2) * 1.35 }}>👑 프리미엄 패밀리 멤버</Text>
                 <Text style={{ fontSize: fontSize - 5, color: 'rgba(255,255,255,0.65)', marginTop: 6, fontWeight: '700', lineHeight: (fontSize - 5) * 1.35 }}>
                   월 3,900원 구독제 · 다음 갱신: 6월 1일
                 </Text>
@@ -1598,7 +1592,7 @@ const s = StyleSheet.create({
   signalText: { fontWeight: '800' },
 
   // 푸터
-  cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 },
+  cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, flexWrap: 'wrap', gap: 8 },
   cardCta: { fontWeight: '800', color: C.gold, letterSpacing: -0.2 },
   shareBtn: { backgroundColor: C.surfaceHigh, borderRadius: 24, paddingHorizontal: 16, paddingVertical: 10, borderWidth: 1.5, borderColor: C.outline, height: 44, justifyContent: 'center' },
   shareBtnText: { color: C.text, fontWeight: '800' },
@@ -1608,7 +1602,7 @@ const s = StyleSheet.create({
   detailButtonOutline: { borderWidth: 1.5, borderColor: C.gold, borderRadius: 24, paddingHorizontal: 16, paddingVertical: 8, height: 38, justifyContent: 'center', alignItems: 'center' },
   detailButtonText: { color: C.gold, fontWeight: '900' },
 
-  badge: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5 },
+  badge: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5, maxWidth: '45%' },
   badgeText: { fontSize: 13, fontWeight: '800' },
   centerLoading: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 80 },
 
@@ -1632,11 +1626,11 @@ const s = StyleSheet.create({
   termDescWrap: { backgroundColor: C.surfaceHigh, borderRadius: 12, padding: 14, marginTop: 12 },
 
   // 🤖 AI Review Styles
-  expertProfileHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(15, 23, 42, 0.08)', paddingBottom: 12 },
+  expertProfileHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(15, 23, 42, 0.08)', paddingBottom: 12, flexWrap: 'wrap' },
   expertAvatar: { width: 50, height: 50, borderRadius: 25, backgroundColor: C.surfaceHigh, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: C.gold },
   expertName: { fontWeight: '800', color: C.text },
   expertTitle: { color: C.textSub, marginTop: 2 },
-  expertRating: { marginLeft: 'auto' },
+  expertRating: { marginTop: 4 },
   expertContentText: { color: C.text, marginTop: 14 },
   otherExpertBtn: { backgroundColor: C.goldFaint, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16, borderWidth: 1, borderColor: C.outline },
 
@@ -1702,7 +1696,7 @@ const s = StyleSheet.create({
   dateText: { color: C.goldLight, fontWeight: '700' },
 
   // 자산 영향도 및 투자 신호의 프리미엄 뱃지 스타일
-  impactBadgeRow: { flexDirection: 'row', gap: 8, marginTop: 12, alignItems: 'center', borderTopWidth: 1, borderTopColor: 'rgba(15, 23, 42, 0.08)', paddingTop: 12 },
+  impactBadgeRow: { flexDirection: 'row', gap: 8, marginTop: 12, alignItems: 'center', borderTopWidth: 1, borderTopColor: 'rgba(15, 23, 42, 0.08)', paddingTop: 12, flexWrap: 'wrap' },
   impactScoreBadge: { backgroundColor: C.goldLight, borderWidth: 1, borderColor: 'rgba(197, 168, 92, 0.2)', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
   impactScoreText: { color: C.goldDark, fontWeight: '800' },
   signalBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: 'transparent' },
