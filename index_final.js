@@ -47,7 +47,7 @@ function parseRSS(xml, category) {
                    item.match(/<description>(.*?)<\/description>/))?.[1]?.trim();
     const link  = (item.match(/<link>(.*?)<\/link>/) ||
                    item.match(/<guid>(.*?)<\/guid>/))?.[1]?.trim();
-    if (title && title.length > 5) {
+    if (title && title.length > 5 && !title.includes('이 시각 헤드라인') && !title.includes('[표]') && !title.includes('[속보]')) {
       items.push({
         title,
         desc: desc?.replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, ' ').trim().slice(0, 300) || '',
