@@ -349,6 +349,7 @@ async function saveToSupabase(newsItems) {
       url: news.url || 'https://www.yna.co.kr',
       term: news.term || '',
       term_desc: news.term_desc || ''
+      critic: news.critic || ''
     });
     await new Promise((resolve, reject) => {
       const url = new URL(CONFIG.SUPABASE_URL + '/rest/v1/news');
