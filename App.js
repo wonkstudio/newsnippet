@@ -211,7 +211,7 @@ function AudioPlayerBar({ item, fontSize }) {
       `핵심 첫 번째, ${item.point1 || item.point_1 || ''}. ` +
       `두 번째, ${item.point2 || item.point_2 || ''}. ` +
       `세 번째, ${item.point3 || item.point_3 || ''}. ` +
-      `나의 지갑과 자산에 미치는 실생활 영향은 ${item.impact || ''} 입니다. 뉴스니핏 아침 브리핑을 마칩니다. 귀하의 스마트한 하루를 응원합니다.`;
+      `나의 실생활에 미치는 영향은 ${item.impact || ''} 입니다. 뉴스니핏 아침 브리핑을 마칩니다. 귀하의 스마트한 하루를 응원합니다.`;
 
     Speech.stop();
     setIsPlaying(true);
@@ -290,10 +290,7 @@ function AudioPlayerBar({ item, fontSize }) {
       </TouchableOpacity>
       <View style={{ flex: 1, marginRight: 8 }}>
         <Text style={[s.audioTitle, { fontSize: fontSize - 2, lineHeight: (fontSize - 2) * 1.35 }]} numberOfLines={1}>
-          {item ? item.title : '아침 브리핑'}
-        </Text>
-        <Text style={{ fontSize: fontSize - 6, color: C.gold, fontWeight: '800', marginTop: 4, lineHeight: (fontSize - 6) * 1.35 }}>
-          {isPlaying ? 'AI 브리핑 리스닝 중...' : '원터치 아침 브리핑 듣기'}
+          {isPlaying ? 'AI 브리핑 리스닝 중...' : '오디오 브리핑 듣기'}
         </Text>
       </View>
       <Equalizer isPlaying={isPlaying} />
@@ -382,7 +379,7 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
 
       <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 40 }}>
         <View style={{ paddingHorizontal: 16, marginTop: 16, marginBottom: 12 }}>
-          <Text style={[s.sectionLbl, { fontSize: fontSize - 2, lineHeight: (fontSize - 2) * 1.35 }]}>오늘 꼭 알아야 할 필수 뉴스</Text>
+          <Text style={[s.sectionLbl, { fontSize: fontSize - 2, lineHeight: (fontSize - 2) * 1.35 }]}>오늘의 필수 뉴스입니다.</Text>
         </View>
 
         <View style={{ paddingHorizontal: 16 }}>
@@ -401,7 +398,7 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
             briefingNews.map((item, i) => {
               const difficulty = i % 2 === 0 ? '보통' : '쉬움';
               const titleSize = fontSize + 1;
-              const summaryLineSize = fontSize - 5;
+              const summaryLineSize = fontSize - 1;
               return (
                 <PressCard
                   key={item.id}
@@ -427,7 +424,7 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
                     {[item.point1, item.point2, item.point3].map((p, j) => (
                       <View key={j} style={s.summaryLine}>
                         <View style={s.dotWrap}>
-                          <Text style={[s.dot, { fontSize: fontSize - 6, lineHeight: (fontSize - 6) * 1.35 }]}>{j + 1}</Text>
+                          <Text style={{ fontSize: fontSize - 2, color: C.gold, lineHeight: (fontSize - 2) * 1.35 }}>•</Text>
                         </View>
                         <Text style={[s.summaryText, { fontSize: summaryLineSize, color: C.navyLight, lineHeight: summaryLineSize * 1.4 }]}>
                           {p}
@@ -450,13 +447,13 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
                   <View style={s.cardDivider} />
 
                   <View style={s.cardFooter}>
-                    <TouchableOpacity onPress={() => { onRead(item.id); onPressNews(item); }}>
-                      <Text style={[s.cardCta, { fontSize: fontSize - 4, lineHeight: (fontSize - 4) * 1.35 }]}>상세 분석 & 오디오 브리핑 ➔</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={s.shareBtnCompact} onPress={() => shareNews(item)}>
-                      <Text style={[s.shareBtnCompactText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.35 }]}>카톡 공유 📤</Text>
-                    </TouchableOpacity>
-                  </View>
+  <TouchableOpacity style={s.shareBtnCompact} onPress={() => { onRead(item.id); onPressNews(item); }}>
+    <Text style={[s.shareBtnCompactText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.35 }]}>상세 브리핑</Text>
+  </TouchableOpacity>
+  <TouchableOpacity style={s.shareBtnCompact} onPress={() => shareNews(item)}>
+    <Text style={[s.shareBtnCompactText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.35 }]}>카톡 공유 📤</Text>
+  </TouchableOpacity>
+</View>
                 </PressCard>
               );
             })
@@ -488,6 +485,7 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
 
 // ── 📰 뉴스 상세 화면 ──
 function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest, guestDetailUsed, onUseGuestDetail, onKakaoLogin }) {
+  const [showImpact, setShowImpact] = useState(false);
   const [activeTab, setActiveTab] = useState('summary');
   const [showTerm, setShowTerm] = useState(false);
 
@@ -499,7 +497,7 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
 
   const isSaved = savedIds.includes(item.id);
 
-  const richAnalysis = `본 사안은 ${item.source}의 최근 취재 및 분석을 기반으로 작성되었으며, 전문 에디터의 정교한 팩트체킹을 통과했습니다. 정책 및 자산 변화의 관점에서 검토했을 때, 현재 가계 자산의 포트폴리오(부동산 및 금융 자산 비중) 조정에 즉각적인 영향을 미칠 수 있는 중요한 시그널을 담고 있습니다.
+  const richAnalysis = item.critic || `${item.source} 기사를 분석 중입니다.
 
 핵심 지표 해석: 본 지표의 자산 영향도는 "${item.impactScore || '💰💰 보통'}" 수준으로 측정되었습니다. 특히, 직장인들과 자영업자의 고정 자산 가치에 미치는 직간접적 변동성이 포착되었으며, "${item.investmentSignal || '⚖️ 중립'}" 투자 전략을 신중하게 조율해야 합니다.
 
@@ -589,18 +587,27 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
                     <Text style={[s.detailLbl, { fontSize: fontSize - 1, lineHeight: (fontSize - 1) * 1.35 }]}>핵심 정리</Text>
                     {[item.point1, item.point2, item.point3].map((p, i) => (
                       <View key={i} style={[s.summaryLine, { marginBottom: 12 }]}>
-                        <View style={s.dotWrap}><Text style={[s.dot, { fontSize: fontSize - 2, lineHeight: (fontSize - 2) * 1.35 }]}>{i + 1}</Text></View>
+                        <Text style={{ fontSize: fontSize - 2, color: C.gold, lineHeight: (fontSize - 2) * 1.35, marginRight: 6 }}>•</Text>
                         <Text style={[s.summaryText, { fontSize: summaryLineSize, color: C.text, lineHeight: summaryLineSize * 1.4 }]}>{p}</Text>
                       </View>
                     ))}
                   </View>
 
-                  <View style={[s.detailCard, { backgroundColor: C.goldLight, borderColor: 'rgba(197, 168, 92, 0.25)' }]}>
-                    <Text style={[s.detailLbl, { fontSize: fontSize - 1, color: C.goldDark, lineHeight: (fontSize - 1) * 1.35 }]}>나에게 미치는 실생활 영향</Text>
-                    <Text style={{ fontSize: fontSize - 1, color: C.goldDark, lineHeight: (fontSize - 1) * 1.6, fontWeight: '700' }}>
-                      👉 {item.impact}
-                    </Text>
-                  </View>
+                  <TouchableOpacity
+  style={[s.detailCard, { backgroundColor: C.goldLight, borderColor: 'rgba(197, 168, 92, 0.25)' }]}
+  onPress={() => setShowImpact(!showImpact)}
+  activeOpacity={0.9}
+>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Text style={[s.detailLbl, { fontSize: fontSize - 1, color: C.goldDark, lineHeight: (fontSize - 1) * 1.35, marginBottom: 0 }]}>나에게 미치는 실생활 영향</Text>
+    <Text style={{ fontSize: fontSize - 2, color: C.goldDark }}>{showImpact ? '▲' : '▼'}</Text>
+  </View>
+  {showImpact && (
+    <Text style={{ fontSize: fontSize - 1, color: C.goldDark, lineHeight: (fontSize - 1) * 1.6, fontWeight: '700', marginTop: 8 }}>
+      👉 {item.impact}
+    </Text>
+  )}
+</TouchableOpacity>
 
                   {item.term ? (
                     <TouchableOpacity
@@ -611,7 +618,7 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
                       <Text style={[s.detailLbl, { fontSize: fontSize - 1, lineHeight: (fontSize - 1) * 1.35 }]}>어려운 지식 용어 설명</Text>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ fontSize: fontSize, color: C.goldDark, fontWeight: '700', lineHeight: fontSize * 1.35 }}>{item.term}</Text>
-                        <Text style={{ fontSize: fontSize - 2, color: C.goldDark, lineHeight: (fontSize - 2) * 1.35 }}>{showTerm ? '▲ 터치해서 닫기' : '▼ 터치해서 펼치기'}</Text>
+<Text style={{ fontSize: fontSize - 2, color: C.goldDark, lineHeight: (fontSize - 2) * 1.35 }}>{showTerm ? '▲' : '▼'}</Text>
                       </View>
                       {showTerm && (
                         <View style={[s.termDescWrap, { backgroundColor: C.surfaceHigh }]}>
@@ -629,13 +636,11 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
                         <Text style={{ fontSize: 28 }}>🤖</Text>
                       </View>
                       <View style={{ flex: 1, minWidth: 0 }}>
-                        <Text style={[s.expertName, { fontSize: fontSize - 1, color: C.text, lineHeight: (fontSize - 1) * 1.35 }]} numberOfLines={2}>뉴스니핏 AI 비평 엔진</Text>
-                        <Text style={[s.expertTitle, { fontSize: fontSize - 4, color: C.textSub, lineHeight: (fontSize - 4) * 1.35 }]} numberOfLines={2}>실시간 금융 변수 예측 및 시장 가치 판단 모델</Text>
-                        <Text style={{ fontSize: fontSize - 4, color: C.gold, lineHeight: (fontSize - 4) * 1.35, marginTop: 4 }}>⭐️ 신뢰도 99%</Text>
+                        <Text style={[s.expertName, { fontSize: fontSize - 1, color: C.text, lineHeight: (fontSize - 1) * 1.35 }]} numberOfLines={2}>뉴스니핏 AI 비평가</Text>
                       </View>
                     </View>
 
-                    <Text style={[s.detailLbl, { fontSize: fontSize - 1, marginTop: 12, lineHeight: (fontSize - 1) * 1.35 }]}>인텔리전스 심층 리스크 비평</Text>
+                    <Text style={[s.detailLbl, { fontSize: fontSize - 1, marginTop: 12, lineHeight: (fontSize - 1) * 1.35 }]}>인텔리전스 전문가 심층 비평</Text>
                     <Text style={[s.expertContentText, { fontSize: fontSize - 1, lineHeight: (fontSize - 1) * 1.5, color: C.text }]}>
                       {richAnalysis}
                     </Text>
@@ -733,7 +738,7 @@ function SavedScreen({ savedIds, onPressNews, news, fontSize, onBackToHome, onDe
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.chipScroll} contentContainerStyle={{ gap: 8, paddingRight: 20 }}>
           {chips.map(cat => {
             const isActive = activeChip === cat;
-            const tabFontSize = Math.max(12, fontSize * 0.5);
+            const tabFontSize = Math.max(22, fontSize * 0.75);
             return (
               <TouchableOpacity
                 key={cat}
@@ -988,9 +993,9 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
               style={s.premiumCardStyle}
             >
               <View style={{ flex: 1, marginRight: 8 }}>
-                <Text style={{ fontSize: fontSize - 2, fontWeight: '900', color: C.white, lineHeight: (fontSize - 2) * 1.35 }}>👑 프리미엄 패밀리 멤버</Text>
+                <Text style={{ fontSize: fontSize - 2, fontWeight: '900', color: C.white, lineHeight: (fontSize - 2) * 1.35 }}>👑 프리미엄 구독제</Text>
                 <Text style={{ fontSize: fontSize - 5, color: 'rgba(255,255,255,0.65)', marginTop: 6, fontWeight: '700', lineHeight: (fontSize - 5) * 1.35 }}>
-                  월 3,900원 구독제 · 다음 갱신: 6월 1일
+                  월 3,900원 · 갱신일: 6월 1일
                 </Text>
               </View>
               <Text style={{ fontSize: 30 }}>👑</Text>
@@ -1032,7 +1037,7 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
           </View>
 
           <View style={{ flexDirection: 'row', gap: 10 }}>
-            {[{ label: '작게', size: 20 }, { label: '보통', size: 24 }, { label: '크게 🌟', size: 28 }].map(opt => {
+            {[{ label: '작게', size: 18 }, { label: '보통', size: 22 }, { label: '크게 🌟', size: 26 }].map(opt => {
               const active = fontSize === opt.size;
               return (
                 <TouchableOpacity
@@ -1113,7 +1118,7 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
                   ]}
                   activeOpacity={0.8}
                 >
-                  <Text style={[{ fontSize: fontSize - 2, fontWeight: '700', lineHeight: (fontSize - 2) * 1.35 }, { color: on ? '#FFFFFF' : C.textSub }]}>
+                  <Text style={[{ fontSize: 22, fontWeight: '700', lineHeight: (fontSize - 2) * 1.35 }, { color: on ? '#FFFFFF' : C.textSub }]}>
                     {it.label}
                   </Text>
                 </TouchableOpacity>
@@ -1344,7 +1349,7 @@ export default function App() {
   const [savedIds, setSavedIds] = useState([]);
   const [pinnedIds, setPinnedIds] = useState([]);
   const [selectedNews, setSelectedNews] = useState(null);
-  const [fontSize, setFontSize] = useState(24); // 기본 24 (작게 20, 보통 24, 크게 28)
+  const [fontSize, setFontSize] = useState(24); // 기본 24 (작게 20, 보통 24, 크게 26)
   const [alarmTime, setAlarmTime] = useState('오전 7:00');
   const [interests, setInterests] = useState(['경제', '부동산', '주식']);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -1571,7 +1576,7 @@ const s = StyleSheet.create({
   // 3줄 요약 박스
   summaryBox: { backgroundColor: C.surfaceHigh, borderRadius: 16, padding: 16, marginTop: 4, borderWidth: 1, borderColor: 'rgba(15, 23, 42, 0.08)' },
   summaryLine: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 12 },
-  dotWrap: { width: 24, height: 24, borderRadius: 12, backgroundColor: 'rgba(181, 138, 60, 0.1)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: C.outline },
+  dotWrap: { marginRight: -3 },
   dot: { fontWeight: '900', color: C.gold },
   summaryText: { color: C.text, flex: 1, fontWeight: '600' },
 
@@ -1626,7 +1631,7 @@ const s = StyleSheet.create({
   termDescWrap: { backgroundColor: C.surfaceHigh, borderRadius: 12, padding: 14, marginTop: 12 },
 
   // 🤖 AI Review Styles
-  expertProfileHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(15, 23, 42, 0.08)', paddingBottom: 12, flexWrap: 'wrap' },
+  expertProfileHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(15, 23, 42, 0.08)', paddingBottom: 12, flexWrap: 'wrap' },
   expertAvatar: { width: 50, height: 50, borderRadius: 25, backgroundColor: C.surfaceHigh, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: C.gold },
   expertName: { fontWeight: '800', color: C.text },
   expertTitle: { color: C.textSub, marginTop: 2 },
