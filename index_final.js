@@ -17,6 +17,12 @@ const RSS_FEEDS = [
 ];
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function sanitizeText(text) {
+  if (!text) return '';
+  return text.replace(/\\/g, '').replace(/"/g, "'").replace(/\n/g, ' ').trim();
+}
+
+
 
 function fetchRSS(url) {
   return new Promise((resolve, reject) => {
@@ -185,10 +191,12 @@ async function summarizeNews(newsItems) {
   for (let i = 0; i < newsItems.length; i++) {
     const news = newsItems[i];
     console.log('\n  → 요약 중: ' + news.title.slice(0, 30));
+    const safeTitle = sanitizeText(news.title);
+    const safeDesc = sanitizeText(news.desc);
     const prompt = 'You are a Korean news summarizer for people aged 40-60.\n' +
       'Analyze this news and output ONLY a JSON object. No explanation.\n\n' +
-      'Title: ' + news.title + '\n' +
-      'Content: ' + news.desc + '\n\n' +
+      'Title: ' + safeTitle + '\n' +
+      'Content: ' + safeDesc + '\n\n' +
       'Rules:\n' +
       '- headline: 20자 이내 핵심 제목\n' +
       '- point1,2,3: 각각 완전한 문장으로 핵심 내용 서술. 40대가 읽었을 때 바로 이해되도록. 30자 이내\n' +
@@ -338,7 +346,7 @@ async function saveToSupabase(newsItems) {
 
   for (const news of newsItems) {
     const body = JSON.stringify({
-      category: news.category === '주요' ? '경제' : news.category,
+      category: (news.category === '주요' || news.category === '경제') ? '경제' : '정치',
       title: news.title,
       headline: news.headline,
       point1: news.point1,
