@@ -348,7 +348,7 @@ async function saveToSupabase(newsItems) {
       source: '연합뉴스',
       url: news.url || 'https://www.yna.co.kr',
       term: news.term || '',
-      term_desc: news.term_desc || ''
+      term_desc: news.term_desc || '',
       critic: news.critic || ''
     });
     await new Promise((resolve, reject) => {
