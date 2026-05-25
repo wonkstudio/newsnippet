@@ -195,8 +195,9 @@ async function summarizeNews(newsItems) {
       '- impact: 40-60대 직장인/자영업자 입장에서 실생활에 구체적으로 어떤 영향인지 (예: 대출이자 월 X만원 증가, 물가 X% 상승 등) 40자 이내\n' +
       '- term: 이 뉴스에서 가장 어려운 단어 1개 (예: 기준금리, 본회의 등)\n' +
       '- term_desc: 그 단어를 50대가 이해할 수 있게 쉽게 설명 30자 이내\n\n' +
+      '- critic: 이 뉴스를 40-50대 직장인·자영업자 관점에서 심층 분석. 경제·금융 뉴스라면 구체적 행동 지침과 향후 전망을 포함하고, 정치·사회 뉴스라면 실생활 영향과 주목해야 할 이유를 중심으로. 3-4문장으로 자연스럽게 작성.\n' +      
       'Output format:\n' +
-      '{"headline":"...","point1":"...","point2":"...","point3":"...","impact":"...","term":"...","term_desc":"..."}';
+      '{"headline":"...","point1":"...","point2":"...","point3":"...","impact":"...","term":"...","term_desc":"...","critic":"..."}';
     try {
       const raw = await callGeminiWithRetry(prompt);
       const parsed = extractJSON(raw);
