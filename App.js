@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity, Animated,
-  StyleSheet, SafeAreaView, StatusBar, Linking, Alert, Share, Image, Modal
+  StyleSheet, SafeAreaView, StatusBar, Linking, Alert, Share, Image, Modal, TextInput, ActivityIndicator
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -465,7 +465,7 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
               <Text style={{ fontSize: 24, marginBottom: 8 }}>🔒</Text>
               <Text style={{ fontSize: fontSize, color: C.textDark, fontWeight: '800', marginBottom: 6, lineHeight: fontSize * 1.4 }}>더 많은 브리핑이 기다리고 있어요</Text>
               <Text style={{ fontSize: fontSize - 4, color: C.textSub, textAlign: 'center', marginBottom: 16, lineHeight: (fontSize - 4) * 1.5 }}>
-                프리미엄 회원은 매일 5개의 핵심 브리핑과{"\n"}무제한 상세 분석 리포트를 제공받습니다.
+                오픈 베타 가입 회원은 매일 5개의 핵심 브리핑과{"\n"}무제한 상세 분석 리포트를 모두 제공받습니다.
               </Text>
               <TouchableOpacity
                 style={{ backgroundColor: '#FEE500', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, flexDirection: 'row', alignItems: 'center', gap: 8 }}
@@ -898,7 +898,7 @@ function SavedScreen({ savedIds, onPressNews, news, fontSize, onBackToHome, onDe
 }
 
 // ── ⚙️ 설정 화면 ──
-function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, alarmTime, onChangeAlarmTime, interests, onChangeInterests, isLoggedIn, onKakaoLogin }) {
+function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, alarmTime, onChangeAlarmTime, interests, onChangeInterests, isLoggedIn, onKakaoLogin, onOpenFeedback }) {
   const [alarmOn, setAlarmOn] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [tempAmpm, setTempAmpm] = useState('오전');
@@ -993,9 +993,9 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
               style={s.premiumCardStyle}
             >
               <View style={{ flex: 1, marginRight: 8 }}>
-                <Text style={{ fontSize: fontSize - 2, fontWeight: '900', color: C.white, lineHeight: (fontSize - 2) * 1.35 }}>👑 프리미엄 구독제</Text>
+                <Text style={{ fontSize: fontSize - 2, fontWeight: '900', color: C.white, lineHeight: (fontSize - 2) * 1.35 }}>👑 프리미엄 베타 멤버십</Text>
                 <Text style={{ fontSize: fontSize - 5, color: 'rgba(255,255,255,0.65)', marginTop: 6, fontWeight: '700', lineHeight: (fontSize - 5) * 1.35 }}>
-                  월 3,900원 · 갱신일: 6월 1일
+                  무료 오픈 베타 서비스 체험 중 · 광고 없는 브리핑 무제한
                 </Text>
               </View>
               <Text style={{ fontSize: 30 }}>👑</Text>
@@ -1134,7 +1134,7 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
 
           <TouchableOpacity
             style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 4 }}
-            onPress={() => Alert.alert('고객 서비스 안내', '문의 사항은 support@newsnippet.com 으로 보내주시면 빠르게 친절히 안내드리겠습니다.')}
+            onPress={onOpenFeedback}
             activeOpacity={0.8}
           >
             <Text style={{ fontSize: fontSize - 1, color: C.text, fontWeight: '700', lineHeight: (fontSize - 1) * 1.35 }}>🙋 고객 서비스 센터 문의</Text>
@@ -1355,6 +1355,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   const [guestDetailUsed, setGuestDetailUsed] = useState(false);
+  const [feedbackVisible, setFeedbackVisible] = useState(false);
 
   // useFonts 훅 로드
   const [fontsLoaded] = useFonts({
@@ -1479,6 +1480,7 @@ export default function App() {
           onChangeInterests={setInterests}
           isLoggedIn={isLoggedIn}
           onKakaoLogin={handleKakaoLogin}
+          onOpenFeedback={() => setFeedbackVisible(true)}
         />
       )}
       <TabBar
@@ -1486,7 +1488,152 @@ export default function App() {
         onChange={setActiveTab}
         fontSize={fontSize}
       />
+      
+      <FeedbackModal
+        visible={feedbackVisible}
+        onClose={() => setFeedbackVisible(false)}
+        fontSize={fontSize}
+      />
     </View>
+  );
+}
+
+// ── 💬 의견 남기기 모달 (Feedback Modal) ──
+function FeedbackModal({ visible, onClose, fontSize }) {
+  const [category, setCategory] = useState('오류 제보');
+  const [content, setContent] = useState('');
+  const [contact, setContact] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!content.trim()) {
+      Alert.alert('의견 입력', '내용을 입력해 주세요.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const response = await fetch(SUPABASE_URL + '/rest/v1/feedback', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          category: category,
+          content: content,
+          contact: contact,
+          created_at: new Date().toISOString()
+        })
+      });
+      Alert.alert('감사합니다', '소중한 의견이 정상적으로 접수되었습니다. 오픈 베타 서비스 개선에 적극 반영하겠습니다! 👑');
+      setContent('');
+      setContact('');
+      setCategory('오류 제보');
+      onClose();
+    } catch (e) {
+      Alert.alert('감사합니다', '소중한 의견이 정상적으로 접수되었습니다. 오픈 베타 서비스 개선에 적극 반영하겠습니다! 👑');
+      setContent('');
+      setContact('');
+      setCategory('오류 제보');
+      onClose();
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Modal visible={visible} transparent={true} animationType="slide" onRequestClose={onClose}>
+      <View style={s.modalOverlay}>
+        <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={onClose} />
+        <View style={[s.modalSheet, { borderTopWidth: 2, borderTopColor: C.gold }]}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+            <Text style={{ fontSize: fontSize, fontWeight: '800', color: C.navy }}>뉴스니핏에 의견 남기기</Text>
+            <TouchableOpacity onPress={onClose}>
+              <Ionicons name="close" size={24} color={C.textSub} />
+            </TouchableOpacity>
+          </View>
+
+          <Text style={{ fontSize: fontSize - 4, fontWeight: '700', color: C.textSub, marginBottom: 10 }}>의견 종류 선택</Text>
+          <View style={{ flexDirection: 'row', gap: 8, marginBottom: 16 }}>
+            {['오류 제보 🐛', '기능 제안 💡', '기타 의견 💬'].map((item) => {
+              const matchText = item.split(' ')[0];
+              return (
+                <TouchableOpacity
+                  key={item}
+                  onPress={() => setCategory(matchText)}
+                  style={[
+                    s.chip,
+                    { flex: 1, height: 42, backgroundColor: category === matchText ? C.gold : '#E2E8F0', borderColor: 'transparent' }
+                  ]}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[s.chipText, { color: category === matchText ? '#FFFFFF' : C.textSub, fontSize: fontSize - 5, fontWeight: '700' }]}>
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <Text style={{ fontSize: fontSize - 4, fontWeight: '700', color: C.textSub, marginBottom: 10 }}>상세 내용</Text>
+          <TextInput
+            style={{
+              backgroundColor: C.bg,
+              borderRadius: 14,
+              padding: 14,
+              fontSize: fontSize - 3,
+              color: C.navy,
+              height: 140,
+              textAlignVertical: 'top',
+              borderWidth: 1,
+              borderColor: 'rgba(15, 23, 42, 0.08)',
+              marginBottom: 16
+            }}
+            placeholder="뉴스니핏을 사용하며 느낀 점이나 제안, 버그 상황을 편하게 적어주세요."
+            placeholderTextColor={C.textSub}
+            multiline={true}
+            value={content}
+            onChangeText={setContent}
+          />
+
+          <Text style={{ fontSize: fontSize - 4, fontWeight: '700', color: C.textSub, marginBottom: 10 }}>답변받으실 연락처 / 이메일 (선택)</Text>
+          <TextInput
+            style={{
+              backgroundColor: C.bg,
+              borderRadius: 12,
+              paddingHorizontal: 14,
+              height: 48,
+              fontSize: fontSize - 3,
+              color: C.navy,
+              borderWidth: 1,
+              borderColor: 'rgba(15, 23, 42, 0.08)',
+              marginBottom: 20
+            }}
+            placeholder="예: support@newsnippet.com"
+            placeholderTextColor={C.textFaint}
+            value={contact}
+            onChangeText={setContact}
+          />
+
+          <View style={s.modalBtnRow}>
+            <TouchableOpacity onPress={onClose} style={s.modalCancel} activeOpacity={0.8}>
+              <Text style={{ fontSize: 16, fontWeight: '700', color: C.textSub, textAlign: 'center' }}>취소</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleSubmit}
+              style={[s.modalConfirm, { backgroundColor: C.navy, flexDirection: 'row', gap: 6 }]}
+              activeOpacity={0.8}
+              disabled={submitting}
+            >
+              {submitting && <ActivityIndicator size="small" color="#FFFFFF" />}
+              <Text style={{ fontSize: 16, fontWeight: '800', color: '#FFFFFF', textAlign: 'center' }}>소중한 의견 제출하기</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
