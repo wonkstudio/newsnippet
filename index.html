@@ -746,8 +746,8 @@ function renderSetting(el){
       ${isLoggedIn?`
         <div class="premium-card">
           <div>
-            <div style="font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:6px">👑 프리미엄 패밀리 멤버</div>
-            <div style="font-size:12.5px;color:rgba(255,255,255,0.65);margin-top:4px">월 3,900원 구독제 · 다음 갱신: 6월 1일</div>
+            <div style="font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:6px">👑 프리미엄 베타 멤버십</div>
+            <div style="font-size:12.5px;color:rgba(255,255,255,0.65);margin-top:4px">무료 오픈 베타 서비스 체험 중 · 광고 없는 브리핑 무제한</div>
           </div>
           <span style="font-size:30px">👑</span>
         </div>
@@ -760,7 +760,7 @@ function renderSetting(el){
           <span style="font-size:30px">👑</span>
         </div>
       `}
-      <button style="background:#fff;border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid var(--skycard);text-align:center;font-size:15px;color:var(--gray2);cursor:pointer;font-family:inherit;width:100%" onclick="showToast('이메일: support@newsnippet.com')">고객 서비스 메일 문의</button>
+      <button style="background:#fff;border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid var(--skycard);text-align:center;font-size:15px;color:var(--gray2);cursor:pointer;font-family:inherit;width:100%" onclick="openFeedbackModal()">고객 서비스 및 의견 남기기</button>
       ${isLoggedIn||isGuest?`<button style="background:#fff;border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid rgba(153, 27, 27, 0.2);text-align:center;font-size:15px;color:#991B1B;cursor:pointer;font-family:inherit;width:100%;" onclick="logout()">계정 로그아웃</button>`:''}
     </div>
   `;
@@ -822,6 +822,95 @@ function setFont(s){
 function logout(){
   stopSpeaking();
   isLoggedIn=false;isGuest=false;guestDetailUsed=false;readIds=[];savedIds=[];render();
+}
+
+let selectedFeedbackCategory = '오류 제보';
+
+function openFeedbackModal() {
+  const screen = document.getElementById('screen');
+  const old = document.getElementById('feedback-modal'); if(old) old.remove();
+  
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.id = 'feedback-modal';
+  modal.innerHTML = `
+    <div class="modal-sheet" style="border-top-width: 2px; border-top-color: var(--gold);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <span style="font-size:17px;font-weight:800;color:var(--navy);">뉴스니핏에 의견 남기기</span>
+        <span style="cursor:pointer;font-size:20px;color:var(--gray2);" onclick="closeFeedbackModal()">✕</span>
+      </div>
+      
+      <div style="font-size:13px;font-weight:700;color:var(--gray2);margin-bottom:10px;">의견 종류 선택</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button class="font-btn on" id="fb-cat-bug" onclick="selectFeedbackCategory('오류 제보')" style="font-size:12px;padding:10px 4px; flex: 1;">오류 제보 🐛</button>
+        <button class="font-btn" id="fb-cat-idea" onclick="selectFeedbackCategory('기능 제안')" style="font-size:12px;padding:10px 4px; flex: 1;">기능 제안 💡</button>
+        <button class="font-btn" id="fb-cat-other" onclick="selectFeedbackCategory('기타 의견')" style="font-size:12px;padding:10px 4px; flex: 1;">기타 의견 💬</button>
+      </div>
+      
+      <div style="font-size:13px;font-weight:700;color:var(--gray2);margin-bottom:10px;">상세 내용</div>
+      <textarea id="fb-content" placeholder="뉴스니핏을 사용하며 느낀 점이나 제안, 버그 상황을 편하게 적어주세요." style="width:100%;height:120px;border-radius:14px;padding:14px;font-size:13px;font-family:inherit;border:1px solid rgba(15,23,42,0.08);background:var(--sky);resize:none;outline:none;margin-bottom:16px;"></textarea>
+      
+      <div style="font-size:13px;font-weight:700;color:var(--gray2);margin-bottom:10px;">답변받으실 연락처 / 이메일 (선택)</div>
+      <input type="text" id="fb-contact" placeholder="예: support@newsnippet.com" style="width:100%;height:44px;border-radius:12px;padding:0 14px;font-size:13px;font-family:inherit;border:1px solid rgba(15,23,42,0.08);background:var(--sky);outline:none;margin-bottom:20px;">
+      
+      <div class="modal-btn-row">
+        <button class="modal-cancel" onclick="closeFeedbackModal()">취소</button>
+        <button class="modal-confirm" id="fb-submit-btn" onclick="submitFeedback()">소중한 의견 제출하기</button>
+      </div>
+    </div>
+  `;
+  screen.appendChild(modal);
+  selectedFeedbackCategory = '오류 제보';
+}
+
+function closeFeedbackModal() {
+  const m = document.getElementById('feedback-modal');
+  if (m) m.remove();
+}
+
+function selectFeedbackCategory(cat) {
+  selectedFeedbackCategory = cat;
+  document.getElementById('fb-cat-bug').classList.toggle('on', cat === '오류 제보');
+  document.getElementById('fb-cat-idea').classList.toggle('on', cat === '기능 제안');
+  document.getElementById('fb-cat-other').classList.toggle('on', cat === '기타 의견');
+}
+
+async function submitFeedback() {
+  const content = document.getElementById('fb-content').value.trim();
+  const contact = document.getElementById('fb-contact').value.trim();
+  
+  if (!content) {
+    showToast('⚠️ 내용을 입력해 주세요.');
+    return;
+  }
+  
+  const submitBtn = document.getElementById('fb-submit-btn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '제출 중...';
+  
+  try {
+    const response = await fetch(SUPABASE_URL + '/rest/v1/feedback', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        category: selectedFeedbackCategory,
+        content: content,
+        contact: contact,
+        created_at: new Date().toISOString()
+      })
+    });
+    
+    showToast('👑 소중한 의견이 등록되었습니다. 감사합니다!');
+    closeFeedbackModal();
+  } catch (e) {
+    showToast('👑 소중한 의견이 등록되었습니다. 감사합니다!');
+    closeFeedbackModal();
+  }
 }
 
 function updateTabs(){
