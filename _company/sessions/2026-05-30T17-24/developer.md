@@ -12,4 +12,9 @@
    - 1024x1024 해상도의 다크 네이비 배너를 흰색 외곽 테두리를 모두 걷어내고 1024x500 정규 비율로 정밀 크롭하여 럭셔리 질감을 극대화.
 5. **구글 플레이 스토어 비공개 테스트 심사 제출**
    - EAS Build를 통한 SDK 경고 소멸 후 `.aab` 완제품 제출 성공.
-   - 13가지 구글 플레이 필수 정보 설정(액세스 권한, 금융 선언, 뉴스 선언 등)을 완전히 패스하여 `검토 중` 상태로 진입 성공.
+6. **0원 AI 쇼츠 자동 생성 엔진 (auto_shorts_generator.py) 신설**
+   - 마케팅을 위한 유튜브 숏폼 비디오(Reels/Shorts) 제작 비용(Runway 등 유료 툴 요금)의 원천 소멸을 위해, 100% 무료 공짜 조립 엔진 구축 완료.
+   - MS Edge-TTS(한국어 프리미엄 뉴스 아나운서 보이스 무제한 무료 연동) 및 HF Serverless FLUX.1 API를 파이썬과 직통 연동.
+   - 윈도우 OS의 고질적 MoviePy 의존성(ImageMagick 설치 에러) 우회를 위해 PIL(Pillow) 라이브러리로 이미지 자체에 테두리 자막을 직접 각인하는 묘수 도입.
+   - 은은한 다큐멘터리급 줌 효과(Ken Burns Effect)를 MoviePy v2.x 최신 API(`with_duration`, `with_effects`, `with_audio`)로 입힌 세로 쇼츠 완제품(`newsnippet_shorts_output.mp4`) 인코딩 검증 통과 및 대안 로컬 그라데이션 이미지 렌더링(skip) 모드 완벽 탑재.
+
