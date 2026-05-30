@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Forum 🗣️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f1f5f9; color: #0f172a; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+
+        const MOCK_TOPIC = {
+            id: 't1',
+            score: 1240,
+            category: 'IT / 인공지능',
+            title: 'AI의 급격한 발전, 기본소득 도입은 필연적인가?',
+            time: '4시간 전',
+            author: 'TechNews_Bot',
+            source: '글로벌테크저널',
+            summary: [
+                '최근 AGI(범용 인공지능)의 등장 가능성이 대두되면서 화이트칼라 일자리 위협 증가.',
+                '실리콘밸리 CEO들 사이에서 AI로 창출된 막대한 부를 분배할 기본소득 제안이 힘을 얻는 중.',
+                '반면, 경제학자들은 막대한 재원 마련 방식과 근로 의욕 저하를 우려하며 팽팽한 대립 중.'
+            ],
+            commentsCount: 89
+        };
+
+        const MOCK_COMMENTS = [
+            {
+                id: 'c1',
+                author: 'ceo_mind',
+                time: '3시간 전',
+                score: 842,
+                content: '단순히 돈을 주는 게 문제가 아니라, 인간의 "존재 가치"를 어디서 찾아야 할지가 더 큰 숙제라고 봅니다. 노동이 사라진 사회에서 사람들은 무엇으로 자아실현을 할까요?',
+                replies: [
+                    {
+                        id: 'c1-1',
+                        author: 'kodari_dev',
+                        time: '2시간 전',
+                        score: 315,
+                        content: '맞습니다. 다만 과거 산업혁명 때도 똑같은 우려가 있었지만 결국 새로운 직업들이 생겨났죠. AI가 코딩을 알아서 해준다면, 저는 더 고차원적인 기획이나 철학적인 설계에 시간을 쏟지 않을까 싶습니다.',
+                        replies: [
+                            {
+                                id: 'c1-1-1',
+                                author: 'future_thinker',
+                                time: '1시간 전',
+                                score: 120,
+                                content: '근데 이번엔 육체노동이 아니라 지적 노동이 대체되는 거라 파급력이 차원이 다를 겁니다.',
+                                replies: []
+                            }
+                        ]
+                    },
+                    {
+                        id: 'c1-2',
+                        author: 'art_lover',
+                        time: '2시간 전',
+                        score: 89,
+                        content: '오히려 창작, 예술, 혹은 사람과 사람이 직접 교감하는 서비스업의 가치가 더 치솟지 않을까요?',
+                        replies: []
+                    }
+                ]
+            },
+            {
+                id: 'c2',
+                author: 'tax_payer',
+                time: '3시간 전',
+                score: 456,
+                content: '기본소득의 재원은 결국 세금인데, 글로벌 AI 기업들이 조세 회피처로 빠져나가면 그 세금은 누가 다 냅니까? 구체적인 과세안 없이 기본소득만 외치는 건 포퓰리즘이라고 생각함.',
+                replies: [
+                    {
+                        id: 'c2-1',
+                        author: 'econ_student',
+                        time: '1시간 전',
+                        score: 210,
+                        content: '그래서 빌 게이츠가 말했던 로봇세(Robot Tax)나 AI세 도입 논의가 본격적으로 이뤄져야 한다고 봅니다.',
+                        replies: []
+                    }
+                ]
+            }
+        ];
+
+        function VoteCol({ score }) {
+            const [vote, setVote] = useState(0); 
+            
+            return (
+                <div className="flex flex-col items-center p-2 bg-slate-50 w-12 rounded-l-lg border-r border-slate-100 shrink-0">
+                    <button 
+                        onClick={() => setVote(vote === 1 ? 0 : 1)}
+                        className={`hover:bg-slate-200 p-1 rounded transition-colors ${vote === 1 ? 'text-orange-500' : 'text-slate-400 hover:text-orange-500'}`}
+                    >
+                        <i className="fas fa-arrow-up"></i>
+                    </button>
+                    <span className={`font-bold text-sm my-1 ${vote === 1 ? 'text-orange-500' : vote === -1 ? 'text-blue-500' : 'text-slate-700'}`}>
+                        {score + vote}
+                    </span>
+                    <button 
+                        onClick={() => setVote(vote === -1 ? 0 : -1)}
+                        className={`hover:bg-slate-200 p-1 rounded transition-colors ${vote === -1 ? 'text-blue-500' : 'text-slate-400 hover:text-blue-500'}`}
+                    >
+                        <i className="fas fa-arrow-down"></i>
+                    </button>
+                </div>
+            );
+        }
+
+        function Comment({ comment }) {
+            const [isCollapsed, setIsCollapsed] = useState(false);
+            const [vote, setVote] = useState(0);
+
+            if (isCollapsed) {
+                return (
+                    <div className="my-2 p-2 bg-white rounded-lg border border-slate-200 flex items-center cursor-pointer hover:bg-slate-50" onClick={() => setIsCollapsed(false)}>
+                        <button className="w-5 h-5 flex items-center justify-center rounded-full bg-slate-200 text-slate-500 mr-2 text-xs">
+                            <i className="fas fa-plus"></i>
+                        </button>
+                        <span className="text-sm text-slate-500 font-medium">{comment.author} 님의 댓글 숨김됨 ({comment.replies.length}개의 대댓글)</span>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="mt-4 flex">
+                    <div className="flex flex-col items-center mr-3 shrink-0 group cursor-pointer" onClick={() => setIsCollapsed(true)}>
+                        <img src={`https://api.dicebear.com/7.x/identicon/svg?seed=${comment.author}`} alt="avatar" className="w-8 h-8 rounded-full mb-1 bg-slate-200" />
+                        <div className="w-0.5 flex-grow bg-slate-200 group-hover:bg-blue-500 transition-colors"></div>
+                    </div>
+                    
+                    <div className="flex-grow min-w-0">
+                        <div className="flex items-center text-xs text-slate-500 mb-1">
+                            <span className="font-bold text-slate-700 mr-2">{comment.author}</span>
+                            <span className="mr-2">•</span>
+                            <span>{comment.time}</span>
+                        </div>
+                        
+                        <p className="text-slate-800 text-[15px] leading-relaxed mb-2">
+                            {comment.content}
+                        </p>
+                        
+                        <div className="flex items-center text-xs font-bold text-slate-500 gap-4">
+                            <div className="flex items-center bg-slate-100 rounded-full">
+                                <button onClick={() => setVote(vote === 1 ? 0 : 1)} className={`px-2 py-1 hover:bg-slate-200 rounded-l-full ${vote === 1 ? 'text-orange-500' : ''}`}><i className="fas fa-arrow-up"></i></button>
+                                <span className="px-1">{comment.score + vote}</span>
+                                <button onClick={() => setVote(vote === -1 ? 0 : -1)} className={`px-2 py-1 hover:bg-slate-200 rounded-r-full ${vote === -1 ? 'text-blue-500' : ''}`}><i className="fas fa-arrow-down"></i></button>
+                            </div>
+                            <button className="flex items-center gap-1 hover:bg-slate-200 px-2 py-1 rounded-md transition-colors">
+                                <i className="far fa-comment-alt"></i> 답글 달기
+                            </button>
+                            <button className="flex items-center gap-1 hover:bg-slate-200 px-2 py-1 rounded-md transition-colors">
+                                <i className="fas fa-share"></i> 공유
+                            </button>
+                        </div>
+                        
+                        {comment.replies && comment.replies.length > 0 && (
+                            <div className="mt-2">
+                                {comment.replies.map(reply => (
+                                    <Comment key={reply.id} comment={reply} />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            return (
+                <div className="min-h-screen pb-20">
+                    <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
+                        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white">
+                                    <i className="fas fa-robot"></i>
+                                </div>
+                                <h1 className="font-extrabold text-xl tracking-tight">NewsForum</h1>
+                            </div>
+                            <div className="w-64 hidden sm:block">
+                                <div className="relative">
+                                    <i className="fas fa-search absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+                                    <input type="text" placeholder="토론 주제 검색..." className="w-full bg-slate-100 rounded-full py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4 text-slate-500 text-xl">
+                                <i className="far fa-bell hover:text-slate-800 cursor-pointer"></i>
+                                <img src="https://i.pravatar.cc/150?u=ceo" alt="profile" className="w-8 h-8 rounded-full border border-slate-200 cursor-pointer bg-slate-100" />
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-4xl mx-auto px-4 mt-6 flex gap-6">
+                        <div className="flex-grow min-w-0">
+                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm flex overflow-hidden hover:border-slate-300 transition-colors">
+                                <VoteCol score={MOCK_TOPIC.score} />
+                                <div className="p-4 flex-grow">
+                                    <div className="flex items-center text-xs text-slate-500 mb-2">
+                                        <span className="font-bold text-slate-800 mr-2">{MOCK_TOPIC.category}</span>
+                                        <span className="mr-2">•</span>
+                                        <span>게시자: u/{MOCK_TOPIC.author}</span>
+                                        <span className="mx-2">•</span>
+                                        <span>{MOCK_TOPIC.time}</span>
+                                    </div>
+                                    
+                                    <h2 className="text-2xl font-bold text-slate-900 mb-4 leading-snug">
+                                        {MOCK_TOPIC.title}
+                                    </h2>
+                                    
+                                    <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4">
+                                        <div className="flex items-center mb-2">
+                                            <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">News Summary</span>
+                                            <span className="text-xs text-blue-600 font-bold ml-2">출처: {MOCK_TOPIC.source}</span>
+                                        </div>
+                                        <ul className="space-y-2">
+                                            {MOCK_TOPIC.summary.map((line, idx) => (
+                                                <li key={idx} className="flex text-sm text-slate-700">
+                                                    <i className="fas fa-play text-[8px] text-blue-400 mt-1.5 mr-2"></i>
+                                                    <span className="leading-relaxed">{line}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    
+                                    <div className="flex items-center text-slate-500 text-xs font-bold gap-1">
+                                        <button className="flex items-center gap-2 hover:bg-slate-100 px-2 py-1.5 rounded-md transition-colors">
+                                            <i className="far fa-comment-alt text-sm"></i> 
+                                            <span>{MOCK_TOPIC.commentsCount} Comments</span>
+                                        </button>
+                                        <button className="flex items-center gap-2 hover:bg-slate-100 px-2 py-1.5 rounded-md transition-colors">
+                                            <i className="fas fa-share text-sm"></i> 
+                                            <span>Share</span>
+                                        </button>
+                                        <button className="flex items-center gap-2 hover:bg-slate-100 px-2 py-1.5 rounded-md transition-colors">
+                                            <i className="far fa-bookmark text-sm"></i> 
+                                            <span>Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 mb-8 px-4">
+                                <div className="text-sm mb-2">
+                                    Comment as <span className="text-blue-600 font-bold">ceo_mind</span>
+                                </div>
+                                <div className="border border-slate-300 rounded-lg overflow-hidden bg-white focus-within:border-slate-800 transition-colors">
+                                    <textarea 
+                                        className="w-full p-3 h-24 text-sm focus:outline-none resize-none" 
+                                        placeholder="이 뉴스에 대한 대표님의 생각을 남겨주세요..."
+                                    ></textarea>
+                                    <div className="bg-slate-50 px-3 py-2 flex justify-end">
+                                        <button className="bg-slate-800 text-white font-bold text-sm px-4 py-1.5 rounded-full hover:bg-slate-700 transition-colors">
+                                            댓글 등록
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex items-center justify-between mb-4 px-4 border-b border-slate-200 pb-2">
+                                <div className="font-bold text-slate-800">Top Comments</div>
+                                <div className="text-blue-600 text-sm font-bold cursor-pointer hover:underline">View All</div>
+                            </div>
+
+                            <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+                                {MOCK_COMMENTS.map(comment => (
+                                    <Comment key={comment.id} comment={comment} />
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="w-80 hidden lg:block shrink-0">
+                            <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm mb-4">
+                                <div className="font-bold text-slate-800 mb-2">About NewsForum</div>
+                                <p className="text-sm text-slate-600 mb-4 leading-relaxed">
+                                    세상의 모든 뉴스를 3줄로 요약하고, 그에 대한 집단 지성의 깊이 있는 토론을 지향하는 커뮤니티입니다.
+                                </p>
+                                <div className="flex justify-between text-sm border-t border-slate-100 pt-4 mb-4">
+                                    <div className="text-center">
+                                        <div className="font-bold text-slate-800">12.4k</div>
+                                        <div className="text-xs text-slate-500">Members</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="font-bold text-green-500">342</div>
+                                        <div className="text-xs text-slate-500">Online</div>
+                                    </div>
+                                </div>
+                                <button className="w-full bg-blue-600 text-white font-bold rounded-full py-2 hover:bg-blue-700 transition-colors">
+                                    Join Community
+                                </button>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

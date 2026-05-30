@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Threads 📱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #0a0a0a; /* neutral-950 */
+            color: #fafafa; /* neutral-50 */
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const MOCK_THREADS = [
+            {
+                id: 1,
+                user: { name: '대표님 (CEO)', handle: '@solopreneur_1', avatar: 'https://i.pravatar.cc/150?u=ceo' },
+                time: '2분 전',
+                insight: '금리 인하 소식 떴네요. 생각보다 빠른 타이밍인데, 지금 당장 대출 갈아타기보다는 조금 관망하면서 환율 방어 전략 세우는 게 낫겠습니다.',
+                news: {
+                    source: '매일경제',
+                    title: '미국 연준, 예상 깨고 금리 0.5%p 파격 인하 단행',
+                    summary: [
+                        '경기 침체 우려 선제 대응 차원의 빅컷(Big Cut).',
+                        '한국은행의 기준금리 인하 압박도 커질 전망.',
+                        '뉴욕 증시 및 가상자산 시장은 일제히 급등세.'
+                    ]
+                },
+                likes: 124, comments: 12
+            },
+            {
+                id: 2,
+                user: { name: '코다리 개발부장', handle: '@kodari_dev', avatar: 'https://raw.githubusercontent.com/wonseokjung/solopreneur-ai-agents/main/agents/kodari/assets/kodari_salute.png' },
+                time: '15분 전',
+                insight: '와, 오픈AI가 또 일냈습니다! 🎉 개발 속도가 3배 이상 단축될 것 같은데, 이참에 우리 서비스에도 이 새 모델 도입하는 방안 바로 테스트 들어가겠습니다!! 🚀',
+                news: {
+                    source: '테크크런치',
+                    title: '오픈AI, 코딩 특화 초거대 AI 모델 전격 공개',
+                    summary: [
+                        '기존 GPT-4 대비 코드 생성 및 디버깅 속도 3배 향상.',
+                        '복잡한 아키텍처 설계까지 스스로 제안하는 기능 탑재.',
+                        '다음 달 유료 구독자 및 API 사용자에게 배포 예정.'
+                    ]
+                },
+                likes: 89, comments: 5
+            },
+            {
+                id: 3,
+                user: { name: '마케터 제이', handle: '@jay_marketer', avatar: 'https://i.pravatar.cc/150?u=jay' },
+                time: '1시간 전',
+                insight: '틱톡 금지법 통과되면 진짜 인플루언서 마케팅 판도 확 바뀔 듯. 쇼츠나 릴스로 파이 다 넘어갈 텐데 우리도 미리 플랫폼 다변화 셋업 해둬야겠네요.',
+                news: {
+                    source: 'IT조선',
+                    title: '美 하원, 틱톡 강제 매각 법안 전격 통과',
+                    summary: [
+                        '6개월 내 미국 사업권 매각하지 않으면 앱스토어에서 퇴출.',
+                        '상원 통과 및 대통령 서명 시 즉각 발효 예정.',
+                        '크리에이터 반발 거세며 타 플랫폼 이탈 조짐 시작.'
+                    ]
+                },
+                likes: 45, comments: 3
+            }
+        ];
+
+        function ThreadPost({ post }) {
+            return (
+                <div className="border-b border-neutral-800 p-4 hover:bg-neutral-900/50 transition-colors cursor-pointer">
+                    <div className="flex gap-3">
+                        <div className="flex flex-col items-center">
+                            <img src={post.user.avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover bg-neutral-800" />
+                            <div className="w-0.5 h-full bg-neutral-800 mt-2 mb-1 rounded-full"></div>
+                        </div>
+                        
+                        <div className="flex-1 pb-2">
+                            <div className="flex items-center justify-between mb-1">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="font-bold text-neutral-100">{post.user.name}</span>
+                                    <i className="fas fa-check-circle text-blue-500 text-xs mt-0.5"></i>
+                                </div>
+                                <span className="text-neutral-500 text-sm">{post.time}</span>
+                            </div>
+                            
+                            <p className="text-neutral-200 text-[15px] leading-relaxed mb-3 whitespace-pre-line">
+                                {post.insight}
+                            </p>
+                            
+                            <div className="border border-neutral-700 rounded-xl p-4 bg-neutral-900 mb-4 hover:bg-neutral-800 transition-colors">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-neutral-800 text-neutral-300">
+                                        {post.news.source}
+                                    </span>
+                                </div>
+                                <h4 className="font-bold text-neutral-100 text-lg mb-2 leading-snug">
+                                    {post.news.title}
+                                </h4>
+                                <ul className="space-y-1">
+                                    {post.news.summary.map((line, idx) => (
+                                        <li key={idx} className="flex text-sm text-neutral-400">
+                                            <span className="mr-2 text-neutral-600">•</span>
+                                            <span className="leading-snug">{line}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            
+                            <div className="flex gap-6 text-neutral-500 text-sm">
+                                <button className="flex items-center gap-2 hover:text-red-500 transition-colors group">
+                                    <div className="w-8 h-8 rounded-full group-hover:bg-red-500/10 flex items-center justify-center transition-colors">
+                                        <i className="far fa-heart"></i>
+                                    </div>
+                                    <span>{post.likes}</span>
+                                </button>
+                                <button className="flex items-center gap-2 hover:text-blue-500 transition-colors group">
+                                    <div className="w-8 h-8 rounded-full group-hover:bg-blue-500/10 flex items-center justify-center transition-colors">
+                                        <i className="far fa-comment"></i>
+                                    </div>
+                                    <span>{post.comments}</span>
+                                </button>
+                                <button className="flex items-center gap-2 hover:text-green-500 transition-colors group">
+                                    <div className="w-8 h-8 rounded-full group-hover:bg-green-500/10 flex items-center justify-center transition-colors">
+                                        <i className="fas fa-retweet"></i>
+                                    </div>
+                                </button>
+                                <button className="flex items-center gap-2 hover:text-blue-500 transition-colors group ml-auto">
+                                    <div className="w-8 h-8 rounded-full group-hover:bg-blue-500/10 flex items-center justify-center transition-colors">
+                                        <i className="far fa-share-square"></i>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            return (
+                <div className="min-h-screen bg-black text-neutral-50 flex justify-center">
+                    <main className="w-full max-w-[600px] border-x border-neutral-800 min-h-screen">
+                        <header className="sticky top-0 z-10 bg-black/80 backdrop-blur-md border-b border-neutral-800">
+                            <div className="flex items-center justify-between p-4 h-16">
+                                <div className="w-8 h-8"></div>
+                                <h1 className="font-extrabold text-xl tracking-tight">NewsThreads</h1>
+                                <button className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-colors">
+                                    <i className="fas fa-pen text-sm"></i>
+                                </button>
+                            </div>
+                        </header>
+
+                        <div className="p-4 border-b border-neutral-800 flex gap-3">
+                            <img src="https://i.pravatar.cc/150?u=ceo" alt="my-avatar" className="w-10 h-10 rounded-full object-cover" />
+                            <div className="flex-1 flex items-center">
+                                <span className="text-neutral-500 text-[15px]">오늘 주목한 뉴스와 인사이트를 적어보세요...</span>
+                            </div>
+                            <button className="self-end px-4 py-1.5 bg-neutral-100 text-black font-bold rounded-full text-sm opacity-50 cursor-not-allowed">
+                                게시
+                            </button>
+                        </div>
+
+                        <div>
+                            {MOCK_THREADS.map(post => (
+                                <ThreadPost key={post.id} post={post} />
+                            ))}
+                        </div>
+                        
+                        <div className="h-20 flex items-center justify-center text-neutral-600 text-sm">
+                            <i className="fas fa-spinner fa-spin mr-2"></i> 새로운 스레드 불러오는 중...
+                        </div>
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<svg width="16" height="16" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Newsnippet 16x16</title>
+  <rect width="1024" height="1024" rx="230" fill="#2563EB"/>
+  <text x="512" y="620" text-anchor="middle" font-size="460" font-weight="900" font-family="Georgia, 'Times New Roman', serif" fill="white">NS</text>
+  <rect x="180" y="730" width="664" height="32" rx="16" fill="white" opacity="0.4"/>
+</svg>

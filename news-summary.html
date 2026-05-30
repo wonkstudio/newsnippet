@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3줄 뉴스 요약 🚀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+
+        const MOCK_NEWS = [
+            {
+                id: 1,
+                category: 'IT/테크',
+                categoryColor: 'bg-blue-100 text-blue-700',
+                title: '오픈AI, 새로운 초거대 AI 모델 전격 공개',
+                time: '2시간 전',
+                summary: [
+                    '기존 모델보다 추론 속도가 3배 이상 빨라짐.',
+                    '한국어를 포함한 다국어 처리 능력이 대폭 향상됨.',
+                    '다음 달부터 유료 구독자들에게 우선 제공될 예정.'
+                ],
+                source: '테크데일리'
+            },
+            {
+                id: 2,
+                category: '경제',
+                categoryColor: 'bg-green-100 text-green-700',
+                title: '미국 연준, 기준금리 0.25%p 전격 인하',
+                time: '5시간 전',
+                summary: [
+                    '인플레이션 둔화세에 힘입어 금리 인하 사이클 진입.',
+                    '나스닥 등 글로벌 주요 증시는 일제히 상승 마감.',
+                    '한국은행도 다음 금통위에서 금리 인하를 검토할 전망.'
+                ],
+                source: '글로벌경제'
+            },
+            {
+                id: 3,
+                category: 'IT/테크',
+                categoryColor: 'bg-blue-100 text-blue-700',
+                title: '애플, 첫 폴더블 아이폰 2027년 출시 유력',
+                time: '12시간 전',
+                summary: [
+                    '공급망 소식통에 따르면 폴더블 패널 양산 준비 착수.',
+                    '화면 주름을 최소화하는 새로운 힌지 기술 적용 예정.',
+                    '초기 가격은 일반 프로 맥스 모델보다 높을 것으로 예상됨.'
+                ],
+                source: 'IT인사이드'
+            },
+            {
+                id: 4,
+                category: '사회',
+                categoryColor: 'bg-orange-100 text-orange-700',
+                title: '전국 벚꽃 개화 시기, 평년보다 3일 빠를 듯',
+                time: '1일 전',
+                summary: [
+                    '따뜻한 봄 날씨가 이어지면서 개화 시기가 앞당겨짐.',
+                    '제주를 시작으로 이달 말 남부 지방부터 만개 예상.',
+                    '지자체들은 몰려들 상춘객 대비에 총력을 기울이는 중.'
+                ],
+                source: '데일리포스트'
+            }
+        ];
+
+        function NewsCard({ news }) {
+            return (
+                <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 border border-slate-100 flex flex-col h-full">
+                    <div className="flex justify-between items-center mb-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${news.categoryColor}`}>
+                            {news.category}
+                        </span>
+                        <span className="text-xs text-slate-400 font-medium">{news.time}</span>
+                    </div>
+                    
+                    <h3 className="text-xl font-bold mb-4 leading-tight text-slate-800 line-clamp-2 hover:text-blue-600 transition-colors cursor-pointer">
+                        {news.title}
+                    </h3>
+                    
+                    <div className="bg-slate-50 p-4 rounded-xl mb-4 flex-grow">
+                        <ul className="space-y-2">
+                            {news.summary.map((line, idx) => (
+                                <li key={idx} className="flex text-sm text-slate-600">
+                                    <i className="fas fa-check text-blue-500 mt-1 mr-2 text-[10px]"></i>
+                                    <span className="leading-snug">{line}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    
+                    <div className="flex justify-between items-center mt-auto pt-2 border-t border-slate-100">
+                        <span className="text-xs text-slate-400 font-medium">출처: {news.source}</span>
+                        <button className="text-blue-600 text-sm font-bold hover:text-blue-800 flex items-center group">
+                            원문 보기 
+                            <i className="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            const [filter, setFilter] = useState('전체');
+            const categories = ['전체', 'IT/테크', '경제', '사회'];
+
+            const filteredNews = filter === '전체' 
+                ? MOCK_NEWS 
+                : MOCK_NEWS.filter(news => news.category === filter);
+
+            return (
+                <div className="min-h-screen pb-12">
+                    <header className="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+                        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-blue-600">
+                                <i className="fas fa-bolt text-2xl"></i>
+                                <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
+                                    3초컷<span className="text-blue-600">뉴스</span>
+                                </h1>
+                            </div>
+                            <button className="bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-slate-800 transition-colors">
+                                구독하기
+                            </button>
+                        </div>
+                    </header>
+
+                    <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+                        <div className="mb-8">
+                            <h2 className="text-3xl font-extrabold text-slate-900 mb-2">오늘의 핵심 이슈 🔥</h2>
+                            <p className="text-slate-500">바쁜 당신을 위해, 세상의 흐름을 단 3줄로 요약해 드립니다.</p>
+                        </div>
+
+                        <div className="flex space-x-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+                            {categories.map(cat => (
+                                <button
+                                    key={cat}
+                                    onClick={() => setFilter(cat)}
+                                    className={`px-5 py-2 rounded-full font-semibold text-sm whitespace-nowrap transition-colors ${
+                                        filter === cat 
+                                            ? 'bg-blue-600 text-white shadow-md' 
+                                            : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                                    }`}
+                                >
+                                    {cat}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredNews.map(news => (
+                                <NewsCard key={news.id} news={news} />
+                            ))}
+                        </div>
+                        
+                        {filteredNews.length === 0 && (
+                            <div className="text-center py-20 text-slate-400">
+                                <i className="fas fa-inbox text-4xl mb-4"></i>
+                                <p>해당 카테고리의 뉴스가 없습니다.</p>
+                            </div>
+                        )}
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

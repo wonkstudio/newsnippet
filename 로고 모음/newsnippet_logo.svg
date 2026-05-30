@@ -1,0 +1,21 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Newsnippet Logo</title>
+  <desc>Newsnippet (뉴스니핏) 앱 로고 — 블루 배경 흰 NS</desc>
+
+  <!-- 배경 -->
+  <rect width="1024" height="1024" rx="230" fill="#2563EB"/>
+
+  <!-- NS 텍스트 -->
+  <text
+    x="512"
+    y="620"
+    text-anchor="middle"
+    font-size="460"
+    font-weight="900"
+    font-family="Georgia, 'Times New Roman', serif"
+    fill="white"
+  >NS</text>
+
+  <!-- 밑줄 포인트 -->
+  <rect x="180" y="730" width="664" height="32" rx="16" fill="white" opacity="0.4"/>
+</svg>
