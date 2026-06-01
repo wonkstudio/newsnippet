@@ -3,8 +3,8 @@ const https = require('https');
 const CONFIG = {
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   KAKAO_ACCESS_TOKEN: process.env.KAKAO_ACCESS_TOKEN,
-  SUPABASE_URL: process.env.SUPABASE_URL,
-  SUPABASE_KEY: process.env.SUPABASE_KEY,
+  SUPABASE_URL: process.env.SUPABASE_URL || 'https://xglszfrjbcsmypxxjegq.supabase.co',
+  SUPABASE_KEY: process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnbHN6ZnJqYmNzbXlweHhqZWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzODI0OTUsImV4cCI6MjA5NDk1ODQ5NX0.q2yzXfKCui_g2eBuBWeitbh5Lrp_WMcbl7KEjryowXE',
   NEWS_COUNT: 5,
   MAX_RETRY: 5,
   RETRY_DELAY: 30000,
