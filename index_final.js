@@ -33,6 +33,7 @@ function fetchRSS(url) {
         fetchRSS(res.headers.location).then(resolve).catch(reject);
         return;
       }
+      res.setEncoding('utf8');
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => resolve(data));
@@ -125,6 +126,7 @@ async function callGeminiWithRetry(prompt, attempt) {
       }
     };
     const req = https.request(options, function(res) {
+      res.setEncoding('utf8');
       let data = '';
       res.on('data', function(chunk) { data += chunk; });
       res.on('end', async function() {
@@ -250,6 +252,7 @@ async function archiveOldNews() {
       }
     };
     const req = https.request(options, (res) => {
+      res.setEncoding('utf8');
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
@@ -374,6 +377,7 @@ async function saveToSupabase(newsItems) {
         }
       };
       const req = https.request(options, (res) => {
+        res.setEncoding('utf8');
         let data = '';
         res.on('data', chunk => data += chunk);
         res.on('end', () => {
