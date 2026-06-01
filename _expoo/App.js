@@ -1134,19 +1134,28 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
 
           <TouchableOpacity
             style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 4 }}
-            onPress={onOpenFeedback}
+            onPress={() => Linking.openURL('https://wonkstudio.github.io/newsnippet/contact.html')}
             activeOpacity={0.8}
           >
-            <Text style={{ fontSize: fontSize - 1, color: C.text, fontWeight: '700', lineHeight: (fontSize - 1) * 1.35 }}>🙋 고객 서비스 센터 문의</Text>
+            <Text style={{ fontSize: fontSize - 1, color: C.text, fontWeight: '700', lineHeight: (fontSize - 1) * 1.35 }}>🙋 고객 서비스 센터 문의 (웹 지원)</Text>
             <Text style={{ fontSize: fontSize - 1, color: C.textSub, fontWeight: '900', lineHeight: (fontSize - 1) * 1.35 }}>〉</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 4 }}
-            onPress={() => Alert.alert('이용약관 및 정책', '개인정보처리방침 및 서비스 이용약관으로 이동합니다.')}
+            onPress={onOpenFeedback}
             activeOpacity={0.8}
           >
-            <Text style={{ fontSize: fontSize - 1, color: C.text, fontWeight: '700', lineHeight: (fontSize - 1) * 1.35 }}>이용약관 및 정책</Text>
+            <Text style={{ fontSize: fontSize - 1, color: C.text, fontWeight: '700', lineHeight: (fontSize - 1) * 1.35 }}>✍️ 앱 내 1:1 건의사항 접수</Text>
+            <Text style={{ fontSize: fontSize - 1, color: C.textSub, fontWeight: '900', lineHeight: (fontSize - 1) * 1.35 }}>〉</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 4 }}
+            onPress={() => Linking.openURL('https://wonkstudio.github.io/newsnippet/privacy.html')}
+            activeOpacity={0.8}
+          >
+            <Text style={{ fontSize: fontSize - 1, color: C.text, fontWeight: '700', lineHeight: (fontSize - 1) * 1.35 }}>이용약관 및 개인정보처리방침</Text>
             <Text style={{ fontSize: fontSize - 1, color: C.textSub, fontWeight: '900', lineHeight: (fontSize - 1) * 1.35 }}>〉</Text>
           </TouchableOpacity>
 
@@ -1157,6 +1166,16 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
           >
             <Text style={{ fontSize: fontSize - 1, color: '#EF4444', fontWeight: '800', lineHeight: (fontSize - 1) * 1.35 }}>로그아웃</Text>
           </TouchableOpacity>
+        </View>
+
+        {/* 📞 구글 플레이 뉴스 정책 준수를 위한 고품격 연락처 정보 카드 */}
+        <View style={[s.settingCard, { borderColor: 'rgba(197, 168, 92, 0.25)', backgroundColor: C.goldLight, borderLeftWidth: 4, borderLeftColor: C.gold, marginTop: 10 }]}>
+          <Text style={{ fontSize: fontSize - 2, fontWeight: '800', color: C.goldDark, marginBottom: 8, lineHeight: (fontSize - 2) * 1.35 }}>📞 공식 고객지원 정보</Text>
+          <Text style={{ fontSize: fontSize - 4, color: C.text, lineHeight: (fontSize - 4) * 1.5, marginBottom: 4 }}>• <Text style={{ fontWeight: '700' }}>이메일:</Text> seongchlee@gmail.com</Text>
+          <Text style={{ fontSize: fontSize - 4, color: C.text, lineHeight: (fontSize - 4) * 1.5, marginBottom: 4 }}>• <Text style={{ fontWeight: '700' }}>운영사:</Text> 원캐 스튜디오 (Wonk Studio)</Text>
+          <Text style={{ fontSize: fontSize - 5, color: C.textSub, lineHeight: (fontSize - 5) * 1.4, marginTop: 6 }}>
+            뉴스니핏은 뉴스 애그리게이터로서 각 요약 정보의 원본 출처를 명확히 밝히며, 매일 실시간으로 최신 기사를 수집 및 업데이트하고 있습니다.
+          </Text>
         </View>
 
         <View style={s.versionFooter}>
@@ -1334,6 +1353,16 @@ function LoginScreen({ onKakaoLogin, onGuestLogin }) {
             <Text style={s.kakaoBtnText}>카카오톡으로 1초 시작하기</Text>
           </TouchableOpacity>
           <Text style={s.guestNote}>카카오 로그인 시 개인정보는 안전하게 보호됩니다</Text>
+          
+          {/* 📞 구글 플레이 뉴스 정책 준수를 위한 고품격 앱 푸터 영역 */}
+          <View style={{ marginTop: 14, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(197, 168, 92, 0.15)', width: '100%' }}>
+            <Text style={{ fontSize: 13, fontWeight: '700', color: C.gold, marginBottom: 4 }}>📞 고객센터 및 문의처 (Contact Us)</Text>
+            <Text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 2 }}>• 이메일: seongchlee@gmail.com</Text>
+            <Text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 4 }}>• 운영사: 원캐 스튜디오 (Wonk Studio)</Text>
+            <TouchableOpacity onPress={() => Linking.openURL('https://wonkstudio.github.io/newsnippet/contact.html')}>
+              <Text style={{ fontSize: 12, color: C.gold, textDecorationLine: 'underline', marginTop: 4 }}>👉 공식 웹 고객지원 페이지 방문하기</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>
