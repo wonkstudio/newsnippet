@@ -440,6 +440,20 @@ function renderLogin(){
         <button class="kakao-btn" onclick="doKakaoLogin()"><span style="font-size:22px">💬</span>카카오톡으로 1초 시작하기</button>
         <button class="guest-btn" onclick="doGuestLogin()">로그인 없이 맛보기 (뉴스 3개 · 상세 1회)</button>
         <div class="guest-note">카카오 로그인 시 개인정보는 안전하게 보호됩니다</div>
+        
+        <!-- 📞 구글 플레이 뉴스 정책 준수를 위한 고품격 웹 푸터 영역 (Contact Us & Disclaimer) -->
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(197, 168, 92, 0.15); text-align: left; font-size: 11px; color: var(--gray2); line-height: 1.6;">
+          <div style="font-weight: 800; color: var(--navy); margin-bottom: 4px; font-size:12px;">📞 고객센터 및 문의처 (Contact Us)</div>
+          <div>이메일: <a href="mailto:seongchlee@gmail.com" style="color:var(--gold-dark); text-decoration:none; font-weight:700;">seongchlee@gmail.com</a></div>
+          <div>운영사: 원캐 스튜디오 (Wonk Studio) | 대표자 연락처: seongchlee@gmail.com</div>
+          <div style="margin-top: 8px; font-size: 10.5px; color: var(--gray3);">
+            뉴스니핏은 연합뉴스 등 신뢰할 수 있는 언론사의 정식 RSS 및 뉴스 API를 제공하는 뉴스 애그리게이터 서비스입니다. 모든 뉴스 기사는 원문 출처(최초 게시자 및 언론사)를 명확히 표시하며, AI 요약 기술을 활용하여 4050 세대를 위한 리스크 분석 서비스를 제공합니다. 콘텐츠는 매일 실시간으로 자동 업데이트됩니다.
+          </div>
+          <div style="margin-top: 8px; display:flex; gap:12px;">
+            <a href="privacy.html" target="_blank" style="color: var(--gray2); text-decoration: underline; font-weight:700;">개인정보처리방침</a>
+            <a href="contact.html" target="_blank" style="color: var(--gold-dark); text-decoration: underline; font-weight:700;">고객센터 바로가기</a>
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -760,7 +774,21 @@ function renderSetting(el){
           <span style="font-size:30px">👑</span>
         </div>
       `}
-      <button style="background:#fff;border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid var(--skycard);text-align:center;font-size:15px;color:var(--gray2);cursor:pointer;font-family:inherit;width:100%" onclick="openFeedbackModal()">고객 서비스 및 의견 남기기</button>
+      <!-- 📞 구글 플레이 뉴스 정책 준수를 위한 고품격 인앱 문의 및 고객센터 카드 -->
+      <div class="setting-card" style="border-top: 2px solid var(--gold); background: var(--white);">
+        <div class="setting-title" style="display:flex; justify-content:space-between; align-items:center; font-size:14.5px;">
+          <span>📞 고객센터 및 문의하기 (Contact Us)</span>
+        </div>
+        <div style="font-size:12.5px; color:var(--navy-light); line-height:1.7;">
+          <div style="margin-bottom:6px;"><strong>이메일 문의:</strong> <a href="mailto:seongchlee@gmail.com" style="color:var(--gold-dark); text-decoration:none; font-weight:700;">seongchlee@gmail.com</a></div>
+          <div style="margin-bottom:6px;"><strong>개발 및 운영:</strong> 원캐 스튜디오 (Wonk Studio)</div>
+          <div style="margin-bottom:6px;"><strong>뉴스 원천 출처:</strong> 연합뉴스 (Yonhap News) 등 주요 언론사</div>
+          <div style="font-size:11.5px; color:var(--gray2); line-height:1.5; margin-top:8px; border-top:1px dashed rgba(15,23,42,0.08); padding-top:8px;">
+            본 서비스는 뉴스 애그리게이터로서 각 기사의 원천 출처(최초 게시자 및 언론사)를 명확히 표기하며, 매일 실시간으로 신규 콘텐츠를 자동 업데이트하고 있습니다.
+          </div>
+        </div>
+        <button style="background:var(--sky); border:1px solid var(--skycard); border-radius:12px; padding:12px; margin-top:12px; text-align:center; font-size:13px; font-weight:700; color:var(--navy); cursor:pointer; font-family:inherit; width:100%; transition: all 0.2s;" onclick="openFeedbackModal()">✍️ 고객의견 및 실시간 문의 제출</button>
+      </div>
       ${isLoggedIn||isGuest?`<button style="background:#fff;border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid rgba(153, 27, 27, 0.2);text-align:center;font-size:15px;color:#991B1B;cursor:pointer;font-family:inherit;width:100%;" onclick="logout()">계정 로그아웃</button>`:''}
     </div>
   `;

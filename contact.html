@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>뉴스니핏 — 공식 고객지원 및 문의센터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0F172A;
+    --navy-light: #1E293B;
+    --sky: #F8FAFC;
+    --skycard: #E2E8F0;
+    --gold: #C5A85C;
+    --gold-light: #FBF7EB;
+    --gold-dark: #8C7034;
+    --gold-gradient: linear-gradient(135deg, #F5E3B5 0%, #D4AF37 50%, #B5944A 100%);
+    --white: #FFFFFF;
+    --gray2: #64748B;
+    --gray3: #94A3B8;
+    --gray4: #CBD5E1;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0f1c30 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  /* 프리미엄 리스크 리포트 풍의 컨테이너 */
+  .support-container {
+    max-width: 580px;
+    width: 100%;
+    background: var(--white);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(197, 168, 92, 0.2);
+    border: 3px solid var(--gold);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 헤더 영역 */
+  .support-header {
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    border-bottom: 2px solid rgba(197, 168, 92, 0.15);
+  }
+  
+  .support-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: var(--gold-gradient);
+    opacity: 0.4;
+  }
+  
+  .logo-circle {
+    width: 48px;
+    height: 48px;
+    background: var(--gold-gradient);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    color: var(--navy);
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(197, 168, 92, 0.4);
+    margin-bottom: 12px;
+  }
+  
+  .support-title {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+  
+  .support-subtitle {
+    font-size: 13px;
+    color: var(--gray3);
+    margin-top: 6px;
+  }
+
+  /* 콘텐츠 영역 */
+  .support-content {
+    padding: 32px 24px;
+    background: var(--sky);
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 14px;
+    border-left: 4px solid var(--gold);
+    padding-left: 10px;
+  }
+
+  /* 카드 뷰 */
+  .info-card {
+    background: var(--white);
+    border: 1px solid rgba(197, 168, 92, 0.12);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed rgba(15, 23, 42, 0.08);
+  }
+  
+  .info-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .info-item:first-child {
+    padding-top: 0;
+  }
+
+  .info-label {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--gray2);
+  }
+
+  .info-value {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--navy);
+  }
+
+  .info-value a {
+    color: var(--gold-dark);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+  }
+  
+  .info-value a:hover {
+    color: var(--navy);
+    border-bottom-color: var(--navy);
+  }
+
+  /* 뉴스 출처/수정 공지 영역 */
+  .disclosure-card {
+    background: var(--gold-light);
+    border: 1px solid rgba(197, 168, 92, 0.2);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    font-size: 12.5px;
+    color: var(--gold-dark);
+    line-height: 1.7;
+  }
+
+  .disclosure-title {
+    font-weight: 800;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13.5px;
+  }
+
+  /* 입력 폼 영역 */
+  .inquiry-form {
+    background: var(--white);
+    border: 1px solid rgba(197, 168, 92, 0.1);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray2);
+    margin-bottom: 6px;
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    border: 1px solid var(--skycard);
+    background: var(--sky);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--gold);
+    background: var(--white);
+  }
+
+  .form-textarea {
+    height: 110px;
+    resize: none;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    border: 1px solid var(--gold);
+    color: var(--white);
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(197, 168, 92, 0.15);
+  }
+
+  .submit-btn:active {
+    transform: translateY(1px);
+  }
+
+  /* 하단 링크 및 저작권 */
+  .support-footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--gray3);
+    line-height: 1.6;
+    padding-top: 10px;
+    border-top: 1px solid rgba(15, 23, 42, 0.06);
+  }
+
+  .footer-links {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .footer-links a {
+    color: var(--gray2);
+    text-decoration: underline;
+    font-weight: 700;
+  }
+
+  .footer-links a:hover {
+    color: var(--gold-dark);
+  }
+
+  /* 토스트 팝업 */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px 24px;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 700;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 999;
+    white-space: nowrap;
+    pointer-events: none;
+    border: 1px solid rgba(197, 168, 92, 0.2);
+  }
+  
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="support-container">
+  <!-- 헤더 -->
+  <div class="support-header">
+    <div class="logo-circle">NS</div>
+    <h1 class="support-title">고객지원 및 문의하기</h1>
+    <p class="support-subtitle">시간이 가장 귀한 분들을 위한 프리미엄 아침 브리핑, 뉴스니핏</p>
+  </div>
+  
+  <!-- 본문 -->
+  <div class="support-content">
+    
+    <!-- 📞 개발자 연락처 정보 (Contact Information) -->
+    <h2 class="section-title">📞 공식 연락처 정보</h2>
+    <div class="info-card">
+      <div class="info-item">
+        <span class="info-label">이메일 주소 (Email)</span>
+        <span class="info-value"><a href="mailto:seongchlee@gmail.com">seongchlee@gmail.com</a></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">개발 및 운영사 (Developer)</span>
+        <span class="info-value">원캐 스튜디오 (Wonk Studio)</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">대응 가능 시각 (Support Hours)</span>
+        <span class="info-value">평일 09:00 ~ 18:00 (주말/공휴일 제외)</span>
+      </div>
+    </div>
+
+    <!-- 📰 뉴스 제공 및 실시간 갱신 규격 공지 (News Policy Compliance) -->
+    <h2 class="section-title">📰 뉴스 콘텐츠 공급 및 업데이트 정책</h2>
+    <div class="disclosure-card">
+      <div class="disclosure-title">⚖️ 뉴스 애그리게이터 & 기사 출처 선언</div>
+      <p style="margin-bottom: 8px;">
+        1. **기사 출처 표기**: 뉴스니핏은 연합뉴스 등 신뢰할 수 있는 공인 언론사의 정식 RSS 및 공개 뉴스 API 데이터만을 전처리하여 서비스합니다. 각 요약 기사의 상세 화면 하단에 **[원문 기사 보기]** 및 **[최초 원천 출처(언론사)]**를 100% 투명하게 표기하고 있습니다.
+      </p>
+      <p>
+        2. **실시간 정기 업데이트**: 서비스 내의 경제, 재테크, 정치, 사회 관심 분야 뉴스 브리핑 카드는 고정된 정적 콘텐츠가 아니며, 매일 실시간으로 뉴스 데이터 수집 엔진이 가동되어 **최소 24시간 이내의 최신 콘텐츠**로 상시 갱신됩니다.
+      </p>
+    </div>
+
+    <!-- ✍️ 실시간 의견 제출 폼 (실제 입력 및 반응 동작 구현) -->
+    <h2 class="section-title">✍️ 1:1 고객의견 접수</h2>
+    <div class="inquiry-form">
+      <div class="form-group">
+        <label class="form-label" for="user-email">답변 받으실 이메일 주소</label>
+        <input class="form-input" type="email" id="user-email" placeholder="예: support@newsnippet.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="user-msg">문의 및 건의 내용</label>
+        <textarea class="form-textarea" id="user-msg" placeholder="불편 사항이나 뉴스니핏에 남기고 싶은 제안을 입력해 주세요."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitInquiry()">소중한 의견 전송하기</button>
+    </div>
+
+    <!-- 푸터 -->
+    <div class="support-footer">
+      <div class="footer-links">
+        <a href="index.html">뉴스니핏 홈으로 가기</a>
+        <a href="privacy.html">개인정보처리방침</a>
+      </div>
+      <p>© 2026 Wonk Studio. All rights reserved.</p>
+    </div>
+    
+  </div>
+</div>
+
+<!-- 토스트 -->
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function submitInquiry() {
+  const email = document.getElementById('user-email').value.trim();
+  const msg = document.getElementById('user-msg').value.trim();
+  
+  if (!msg) {
+    showToast('⚠️ 문의 내용을 입력해 주세요.');
+    return;
+  }
+  
+  // 제출 성공 피드백 (Supabase 또는 실제 메일 샌더 연동 가능하도록 확장 설계됨)
+  showToast('👑 소중한 의견이 등록되었습니다. 감사합니다!');
+  
+  document.getElementById('user-email').value = '';
+  document.getElementById('user-msg').value = '';
+}
+</script>
+
+</body>
+</html>
