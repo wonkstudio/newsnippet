@@ -281,6 +281,7 @@ async function loadNews() {
           term: item.term || '',
           termDesc: item.term_desc || '',
           url: item.url || 'https://www.yna.co.kr',
+          critic: item.critic || '',
           impactScore: score,
           investmentSignal: signal,
           signalClass: signalCls
@@ -587,7 +588,7 @@ function setDetailMode(mode) {
 function renderDetail(el){
   const item=selectedNews;
   
-  const richAnalysis = `본 사안은 <strong>${item.source}</strong>의 최근 취재 및 분석을 기반으로 작성되었으며, 전문 에디터의 정교한 팩트체킹을 통과했습니다. 정책 및 자산 변화의 관점에서 검토했을 때, 현재 가계 자산의 포트폴리오(부동산 및 금융 자산 비중) 조정에 즉각적인 영향을 미칠 수 있는 중요한 시그널을 담고 있습니다.<br><br><strong>핵심 지표 해석:</strong> 본 지표의 자산 영향도는 <strong>"${item.impactScore}"</strong> 수준으로 측정되었습니다. 특히, 직장인들과 자영업자의 고정 자산 가치에 미치는 직간접적 변동성이 포착되었으며, <strong>"${item.investmentSignal}"</strong> 투자 전략을 신중하게 조율해야 합니다.<br><br><strong>전문가 권고 비평:</strong> 은퇴 및 재테크 전문가 그룹은 본 기사가 시사하는 단기적 마찰(Friction)에 매몰되기보다는, 중장기적 은퇴 배당 및 세금 혜택 제도(ISA, 연금저축펀드 등)와의 리스크 연계성을 점검할 것을 당부하고 있습니다. 특히 주택 담보 대출 및 가계 부채를 보유한 가구 일수록 고정 지출 상환 흐름을 선제적으로 정리하는 것이 의사결정의 ROI를 높이는 핵심입니다.`;
+  const richAnalysis = item.critic || `본 사안은 <strong>${item.source}</strong>의 최근 취재 및 분석을 기반으로 작성되었으며, 전문 에디터의 정교한 팩트체킹을 통과했습니다. 정책 및 자산 변화의 관점에서 검토했을 때, 현재 가계 자산의 포트폴리오(부동산 및 금융 자산 비중) 조정에 즉각적인 영향을 미칠 수 있는 중요한 시그널을 담고 있습니다.<br><br><strong>핵심 지표 해석:</strong> 본 지표의 자산 영향도는 <strong>"${item.impactScore}"</strong> 수준으로 측정되었습니다. 특히, 직장인들과 자영업자의 고정 자산 가치에 미치는 직간접적 변동성이 포착되었으며, <strong>"${item.investmentSignal}"</strong> 투자 전략을 신중하게 조율해야 합니다.<br><br><strong>전문가 권고 비평:</strong> 은퇴 및 재테크 전문가 그룹은 본 기사가 시사하는 단기적 마찰(Friction)에 매몰되기보다는, 중장기적 은퇴 배당 및 세금 혜택 제도(ISA, 연금저축펀드 등)와의 리스크 연계성을 점검할 것을 당부하고 있습니다. 특히 주택 담보 대출 및 가계 부채를 보유한 가구 일수록 고정 지출 상환 흐름을 선제적으로 정리하는 것이 의사결정의 ROI를 높이는 핵심입니다.`;
 
   el.innerHTML=`
     <div class="detail-header">
