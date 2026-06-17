@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Speech from 'expo-speech';
 import { useFonts, NotoSansKR_400Regular, NotoSansKR_600SemiBold, NotoSansKR_700Bold } from '@expo-google-fonts/noto-sans-kr';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 모든 Text 컴포넌트에 Noto Sans KR 기본 적용
 Text.defaultProps = Text.defaultProps || {};
@@ -69,8 +70,10 @@ async function fetchNews() {
 function shareNews(item) {
   const d = new Date();
   const ds = `${d.getMonth() + 1}월 ${d.getDate()}일`;
+  const isEcon = item.category === '경제';
+  const impactLabel = isEcon ? '자산 영향 분석' : '핵심 영향 분석';
   Share.share({
-    message: `📰 [뉴스니핏] 프리미엄 자산 브리핑 (${ds})\n\n제목: ${item.title}\n\n[핵심 3대 포인트]\n1. ${item.point1}\n2. ${item.point2}\n3. ${item.point3}\n\n👉 자산 영향 분석: ${item.impact}\n\n출처: ${item.source}\n──────────────\n매일 아침 5분, 나를 위한 자산관리 AI 브리핑`
+    message: `📰 [뉴스니핏] 프리미엄 핵심 브리핑 (${ds})\n\n제목: ${item.title}\n\n[핵심 3대 포인트]\n1. ${item.point1}\n2. ${item.point2}\n3. ${item.point3}\n\n👉 ${impactLabel}: ${item.impact}\n\n출처: ${item.source}\n──────────────\n매일 아침 5분, 오늘의 핵심 브리핑\n링크: https://wonkstudio.github.io/newsnippet/`
   });
 }
 
@@ -316,68 +319,68 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
   const pct = briefingNews.length > 0 ? Math.round((readCount / briefingNews.length) * 100) : 0;
 
   return (
-    <SafeAreaView style={s.safe}>
+    <View style={s.safe}>
       <StatusBar barStyle="light-content" backgroundColor={C.navy} />
 
-      <LinearGradient
-        colors={[C.navy, C.navyLight]}
-        style={s.header}
-      >
-        <View style={s.headerRow}>
-          <View style={s.logoRow}>
-            <Image
-              source={require('./assets/logo.png')}
-              style={s.logoImgPremium}
-            />
-            <Text style={[s.appName, { fontSize: fontSize + 6 }]}>뉴스니핏</Text>
-          </View>
-          <View style={s.headerRightAction}>
-            <View style={s.premiumBadge}>
-              <Text style={[s.premiumBadgeText, { fontSize: fontSize - 7 }]}>PREMIUM</Text>
+      <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 40 }}>
+        <LinearGradient
+          colors={[C.navy, C.navyLight]}
+          style={s.header}
+        >
+          <View style={s.headerRow}>
+            <View style={s.logoRow}>
+              <Image
+                source={require('./assets/logo.png')}
+                style={s.logoImgPremium}
+              />
+              <Text style={[s.appName, { fontSize: fontSize + 6 }]}>뉴스니핏</Text>
             </View>
-            <TouchableOpacity style={s.headerIcon} onPress={() => Alert.alert('알림', '오늘의 핵심 브리핑 소식 5개가 배달 완료되었습니다.')}>
-              <Ionicons name="notifications-outline" size={24} color={C.gold} />
-            </TouchableOpacity>
+            <View style={s.headerRightAction}>
+              <View style={s.premiumBadge}>
+                <Text style={[s.premiumBadgeText, { fontSize: fontSize - 7 }]}>PREMIUM</Text>
+              </View>
+              <TouchableOpacity style={s.headerIcon} onPress={() => Alert.alert('알림', '오늘의 핵심 브리핑 소식 5개가 배달 완료되었습니다.')}>
+                <Ionicons name="notifications-outline" size={24} color={C.gold} />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
 
-        <Text style={[s.headerSub, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.3 }]}>
-          {isGuest ? '👑 편리미엄 체험단 맛보기 플레이 중' : '매일 아침, 오늘의 핵심만 골라드려요'}
-        </Text>
+          <Text style={[s.headerSub, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.3 }]}>
+            {isGuest ? '👑 편리미엄 체험단 맛보기 플레이 중' : '매일 아침, 오늘의 핵심만 골라드려요'}
+          </Text>
 
-        <View style={s.dateBadgeRow}>
-          <View style={s.dateBadge}>
-            <Text style={[s.dateText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.3 }]}>
-              {dateStr} · {briefingNews.length}가지 브리핑
+          <View style={s.dateBadgeRow}>
+            <View style={s.dateBadge}>
+              <Text style={[s.dateText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.3 }]}>
+                {dateStr} · {briefingNews.length}가지 브리핑
+              </Text>
+            </View>
+          </View>
+
+          <View style={s.headerBottomRow}>
+            <View style={{ flex: 1, marginRight: 12 }}>
+              <View style={s.progressBg}>
+                <LinearGradient
+                  colors={['#F5E3B5', '#D4AF37', '#B5944A']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={[s.progressFill, { width: `${pct}%` }]}
+                />
+              </View>
+            </View>
+            <Text style={[s.headerProgressText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.3 }]}>
+              {readCount}/{briefingNews.length} 완료 ({pct}%)
             </Text>
           </View>
-        </View>
 
-        <View style={s.headerBottomRow}>
-          <View style={{ flex: 1, marginRight: 12 }}>
-            <View style={s.progressBg}>
-              <LinearGradient
-                colors={['#F5E3B5', '#D4AF37', '#B5944A']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={[s.progressFill, { width: `${pct}%` }]}
-              />
-            </View>
-          </View>
-          <Text style={[s.headerProgressText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.3 }]}>
-            {readCount}/{briefingNews.length} 완료 ({pct}%)
-          </Text>
-        </View>
+          <LinearGradient
+            colors={['transparent', C.gold, 'transparent']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={s.headerGoldLine}
+          />
+        </LinearGradient>
 
-        <LinearGradient
-          colors={['transparent', C.gold, 'transparent']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={s.headerGoldLine}
-        />
-      </LinearGradient>
-
-      <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 40 }}>
         <View style={{ paddingHorizontal: 16, marginTop: 16, marginBottom: 12 }}>
           <Text style={[s.sectionLbl, { fontSize: fontSize - 2, lineHeight: (fontSize - 2) * 1.35 }]}>오늘의 필수 뉴스입니다.</Text>
         </View>
@@ -435,11 +438,11 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
 
                   <View style={s.impactBadgeRow}>
                     <View style={s.impactScoreBadge}>
-                      <Text style={[s.impactScoreText, { fontSize: fontSize - 6, lineHeight: (fontSize - 6) * 1.35 }]}>자산 영향도: {item.impactScore || '💰💰 보통'}</Text>
+                      <Text style={[s.impactScoreText, { fontSize: fontSize - 6, lineHeight: (fontSize - 6) * 1.35 }]}>{item.category === '경제' ? '자산 영향도' : '실생활 영향도'}: {item.impactScore || '💰💰 보통'}</Text>
                     </View>
                     <View style={[s.signalBadge, item.signalClass === 'pos' ? s.signalPos : (item.signalClass === 'neg' ? s.signalNeg : s.signalNeu)]}>
                       <Text style={[s.signalText, { fontSize: fontSize - 6, color: item.signalClass === 'pos' ? '#2E7D32' : (item.signalClass === 'neg' ? '#C62828' : '#455A64'), lineHeight: (fontSize - 6) * 1.35 }]}>
-                        투자 신호: {item.investmentSignal || '⚖️ 중립'}
+                        {item.category === '경제' ? '투자 신호' : '이슈 흐름'}: {item.investmentSignal || '⚖️ 중립'}
                       </Text>
                     </View>
                   </View>
@@ -447,13 +450,13 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
                   <View style={s.cardDivider} />
 
                   <View style={s.cardFooter}>
-  <TouchableOpacity style={s.shareBtnCompact} onPress={() => { onRead(item.id); onPressNews(item); }}>
-    <Text style={[s.shareBtnCompactText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.35 }]}>상세 브리핑</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={s.shareBtnCompact} onPress={() => shareNews(item)}>
-    <Text style={[s.shareBtnCompactText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.35 }]}>카톡 공유 📤</Text>
-  </TouchableOpacity>
-</View>
+                    <TouchableOpacity style={s.shareBtnCompact} onPress={() => { onRead(item.id); onPressNews(item); }}>
+                      <Text style={[s.shareBtnCompactText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.35 }]}>상세 브리핑</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={s.shareBtnCompact} onPress={() => shareNews(item)}>
+                      <Text style={[s.shareBtnCompactText, { fontSize: fontSize - 5, lineHeight: (fontSize - 5) * 1.35 }]}>카톡 공유 📤</Text>
+                    </TouchableOpacity>
+                  </View>
                 </PressCard>
               );
             })
@@ -479,7 +482,7 @@ function HomeScreen({ news, onPressNews, readIds, onRead, fontSize, loading, int
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -496,12 +499,18 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
   }, []);
 
   const isSaved = savedIds.includes(item.id);
-
-  const richAnalysis = item.critic || `${item.source} 기사를 분석 중입니다.
+  const isEcon = item.category === '경제';
+  const richAnalysis = item.critic || (isEcon 
+    ? `${item.source} 기사를 분석 중입니다.
 
 핵심 지표 해석: 본 지표의 자산 영향도는 "${item.impactScore || '💰💰 보통'}" 수준으로 측정되었습니다. 특히, 직장인들과 자영업자의 고정 자산 가치에 미치는 직간접적 변동성이 포착되었으며, "${item.investmentSignal || '⚖️ 중립'}" 투자 전략을 신중하게 조율해야 합니다.
 
-전문가 권고 비평: 은퇴 및 재테크 전문가 그룹은 본 기사가 시사하는 단기적 마찰(Friction)에 매몰되기보다는, 중장기적 은퇴 배당 및 세금 혜택 제도(ISA, 연금저축펀드 등)와의 리스크 연계성을 점검할 것을 당부하고 있습니다. 특히 주택 담보 대출 및 가계 부채를 보유한 가구 일수록 고정 지출 상환 흐름을 선제적으로 정리하는 것이 의사결정의 ROI를 높이는 핵심입니다.`;
+전문가 권고 비평: 은퇴 및 재테크 전문가 그룹은 본 기사가 시사하는 단기적 마찰(Friction)에 매몰되기보다는, 중장기적 은퇴 배당 및 세금 혜택 제도(ISA, 연금저축펀드 등)와의 리스크 연계성을 점검할 것을 당부하고 있습니다. 특히 주택 담보 대출 및 가계 부채를 보유한 가구 일수록 고정 지출 상환 흐름을 선제적으로 정리하는 것이 의사결정의 ROI를 높이는 핵심입니다.`
+    : `${item.source} 기사를 분석 중입니다.
+
+핵심 지표 해석: 본 지표의 실생활 영향도는 "${item.impactScore || '💰💰 보통'}" 수준으로 측정되었습니다. 특히, 일상생활과 사회적 관심사에 미치는 직간접적 변동성이 포착되었으며, "${item.investmentSignal || '⚖️ 중립'}" 이슈 흐름에 따라 신중하게 상황을 주시해야 합니다.
+
+전문가 권고 비평: 분야별 전문가 그룹은 본 기사가 시사하는 단기적 이슈에 매몰되기보다는, 일상 리스크 및 대응 요령을 선제적으로 정리하는 것이 의사결정의 만족도를 높이는 핵심이라고 당부하고 있습니다.`);
 
   const createdDate = item.created_at ? new Date(item.created_at) : new Date();
   const dateStr = `${createdDate.getFullYear()}.${createdDate.getMonth() + 1}.${createdDate.getDate()} 오전 08:30`;
@@ -594,20 +603,20 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
                   </View>
 
                   <TouchableOpacity
-  style={[s.detailCard, { backgroundColor: C.goldLight, borderColor: 'rgba(197, 168, 92, 0.25)' }]}
-  onPress={() => setShowImpact(!showImpact)}
-  activeOpacity={0.9}
->
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-    <Text style={[s.detailLbl, { fontSize: fontSize - 1, color: C.goldDark, lineHeight: (fontSize - 1) * 1.35, marginBottom: 0 }]}>나에게 미치는 실생활 영향</Text>
-    <Text style={{ fontSize: fontSize - 2, color: C.goldDark }}>{showImpact ? '▲' : '▼'}</Text>
-  </View>
-  {showImpact && (
-    <Text style={{ fontSize: fontSize - 1, color: C.goldDark, lineHeight: (fontSize - 1) * 1.6, fontWeight: '700', marginTop: 8 }}>
-      👉 {item.impact}
-    </Text>
-  )}
-</TouchableOpacity>
+                    style={[s.detailCard, { backgroundColor: C.goldLight, borderColor: 'rgba(197, 168, 92, 0.25)' }]}
+                    onPress={() => setShowImpact(!showImpact)}
+                    activeOpacity={0.9}
+                  >
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text style={[s.detailLbl, { fontSize: fontSize - 1, color: C.goldDark, lineHeight: (fontSize - 1) * 1.35, marginBottom: 0 }]}>{item.category === '경제' ? '자산 영향도' : '실생활 영향도'}</Text>
+                      <Text style={{ fontSize: fontSize - 2, color: C.goldDark }}>{showImpact ? '▲' : '▼'}</Text>
+                    </View>
+                    {showImpact && (
+                      <Text style={{ fontSize: fontSize - 1, color: C.goldDark, lineHeight: (fontSize - 1) * 1.6, fontWeight: '700', marginTop: 8 }}>
+                        👉 {item.impact}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
 
                   {item.term ? (
                     <TouchableOpacity
@@ -618,7 +627,7 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
                       <Text style={[s.detailLbl, { fontSize: fontSize - 1, lineHeight: (fontSize - 1) * 1.35 }]}>어려운 지식 용어 설명</Text>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ fontSize: fontSize, color: C.goldDark, fontWeight: '700', lineHeight: fontSize * 1.35 }}>{item.term}</Text>
-<Text style={{ fontSize: fontSize - 2, color: C.goldDark, lineHeight: (fontSize - 2) * 1.35 }}>{showTerm ? '▲' : '▼'}</Text>
+                        <Text style={{ fontSize: fontSize - 2, color: C.goldDark, lineHeight: (fontSize - 2) * 1.35 }}>{showTerm ? '▲' : '▼'}</Text>
                       </View>
                       {showTerm && (
                         <View style={[s.termDescWrap, { backgroundColor: C.surfaceHigh }]}>
@@ -834,6 +843,19 @@ function SavedScreen({ savedIds, onPressNews, news, fontSize, onBackToHome, onDe
                   <Text style={{ fontSize: titleSize, color: C.text, fontWeight: '800', lineHeight: titleSize * 1.35, marginBottom: 14 }} numberOfLines={2}>
                     {item.title}
                   </Text>
+
+                  <View style={{ flexDirection: 'row', gap: 8, marginBottom: 14, alignItems: 'center' }}>
+                    <View style={{ backgroundColor: C.goldLight, borderColor: 'rgba(197, 168, 92, 0.2)', borderWidth: 1, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 }}>
+                      <Text style={{ color: C.goldDark, fontWeight: '700', fontSize: fontSize - 6, lineHeight: (fontSize - 6) * 1.35 }}>
+                        {item.category === '경제' ? '자산 영향도' : '실생활 영향도'}: {item.impactScore || '💰💰 보통'}
+                      </Text>
+                    </View>
+                    <View style={[{ borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 }, item.signalClass === 'pos' ? s.signalPos : (item.signalClass === 'neg' ? s.signalNeg : s.signalNeu)]}>
+                      <Text style={{ fontWeight: '700', fontSize: fontSize - 6, color: item.signalClass === 'pos' ? '#2E7D32' : (item.signalClass === 'neg' ? '#C62828' : '#455A64'), lineHeight: (fontSize - 6) * 1.35 }}>
+                        {item.category === '경제' ? '투자 신호' : '이슈 흐름'}: {item.investmentSignal || '⚖️ 중립'}
+                      </Text>
+                    </View>
+                  </View>
 
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderTopWidth: 1, borderTopColor: 'rgba(15, 23, 42, 0.05)', paddingTop: 10 }}>
                     <Text style={{ fontSize: fontSize - 4, color: C.textSub, fontWeight: '600', lineHeight: (fontSize - 4) * 1.35 }}>
@@ -1180,7 +1202,7 @@ function SettingScreen({ fontSize, onChangeFontSize, onLogout, onBackToHome, ala
 
         <View style={s.versionFooter}>
           <Text style={[s.versionFooterText, { fontSize: fontSize - 5, color: C.textSub, lineHeight: (fontSize - 5) * 1.35 }]}>
-            뉴스니핏 버전 v1.0.0
+            뉴스니핏 버전 v1.0.0 (Build 7)
           </Text>
         </View>
 
@@ -1311,7 +1333,7 @@ function LoginScreen({ onKakaoLogin, onGuestLogin }) {
           />
           <Text style={s.loginLogoTitle}>뉴스니핏</Text>
           {/* 대표님 지시로 서브텍스트(태그라인) 폰트를 19pt로 큼직하고 시원시원하게 전격 확대 완료! */}
-          <Text style={s.loginTagline}>시간이 가장 귀한 분들을 위한{'\n'}프리미엄 AI 아침 브리핑 파트너</Text>
+          <Text style={s.loginTagline}>매일 아침 5분, 오늘의 핵심 브리핑</Text>
         </LinearGradient>
 
         {/* 큼직큼직하게 시원하게 키운 4대 혜택 카드 프리뷰 영역 */}
@@ -1393,15 +1415,69 @@ export default function App() {
     NotoSansKR_700Bold
   });
 
+  // App 로드 시 영구 저장된 설정 복원 및 뉴스 로드
   useEffect(() => {
     async function loadData() {
       setLoading(true);
+      
+      // 1. 뉴스 데이터 fetch
       const data = await fetchNews();
       setNews(data);
+
+      // 2. AsyncStorage에서 설정값 복원
+      try {
+        const storedFontSize = await AsyncStorage.getItem('@font_size');
+        if (storedFontSize) setFontSize(parseInt(storedFontSize, 10));
+
+        const storedAlarmTime = await AsyncStorage.getItem('@alarm_time');
+        if (storedAlarmTime) setAlarmTime(storedAlarmTime);
+
+        const storedInterests = await AsyncStorage.getItem('@interests');
+        if (storedInterests) setInterests(JSON.parse(storedInterests));
+
+        const storedReadIds = await AsyncStorage.getItem('@read_ids');
+        if (storedReadIds) setReadIds(JSON.parse(storedReadIds));
+
+        const storedSavedIds = await AsyncStorage.getItem('@saved_ids');
+        if (storedSavedIds) setSavedIds(JSON.parse(storedSavedIds));
+
+        const storedPinnedIds = await AsyncStorage.getItem('@pinned_ids');
+        if (storedPinnedIds) setPinnedIds(JSON.parse(storedPinnedIds));
+      } catch (e) {
+        console.log('설정값 복원 에러:', e);
+      }
+
       setLoading(false);
     }
     loadData();
   }, []);
+
+  // 설정 및 뱃지 상태 변경 시 자동 영구 저장
+  useEffect(() => {
+    AsyncStorage.setItem('@font_size', fontSize.toString()).catch(() => {});
+  }, [fontSize]);
+
+  useEffect(() => {
+    AsyncStorage.setItem('@alarm_time', alarmTime).catch(() => {});
+  }, [alarmTime]);
+
+  useEffect(() => {
+    AsyncStorage.setItem('@interests', JSON.stringify(interests)).catch(() => {});
+  }, [interests]);
+
+  useEffect(() => {
+    if (readIds.length > 0) {
+      AsyncStorage.setItem('@read_ids', JSON.stringify(readIds)).catch(() => {});
+    }
+  }, [readIds]);
+
+  useEffect(() => {
+    AsyncStorage.setItem('@saved_ids', JSON.stringify(savedIds)).catch(() => {});
+  }, [savedIds]);
+
+  useEffect(() => {
+    AsyncStorage.setItem('@pinned_ids', JSON.stringify(pinnedIds)).catch(() => {});
+  }, [pinnedIds]);
 
   const handleKakaoLogin = () => {
     Alert.alert('로그인', '카카오톡 안전 로그인 성공!');
@@ -1578,7 +1654,7 @@ function FeedbackModal({ visible, onClose, fontSize }) {
         <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={onClose} />
         <View style={[s.modalSheet, { borderTopWidth: 2, borderTopColor: C.gold }]}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-            <Text style={{ fontSize: fontSize, fontWeight: '800', color: C.navy }}>뉴스니핏에 의견 남기기</Text>
+            <Text style={{ color: C.textOnDark, fontSize: 15, fontWeight: '600', marginBottom: 40, opacity: 0.85 }}>매일 아침 5분, 오늘의 핵심 브리핑</Text>
             <TouchableOpacity onPress={onClose}>
               <Ionicons name="close" size={24} color={C.textSub} />
             </TouchableOpacity>

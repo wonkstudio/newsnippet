@@ -4,7 +4,8 @@ const CONFIG = {
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   KAKAO_ACCESS_TOKEN: process.env.KAKAO_ACCESS_TOKEN,
   SUPABASE_URL: process.env.SUPABASE_URL || 'https://xglszfrjbcsmypxxjegq.supabase.co',
-  SUPABASE_KEY: process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnbHN6ZnJqYmNzbXlweHhqZWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzODI0OTUsImV4cCI6MjA5NDk1ODQ5NX0.q2yzXfKCui_g2eBuBWeitbh5Lrp_WMcbl7KEjryowXE',
+  // 백엔드 쓰기 권한을 위해 SUPABASE_SERVICE_ROLE_KEY를 최우선으로 가져오고, 없으면 기존 anon key 사용
+  SUPABASE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnbHN6ZnJqYmNzbXlweHhqZWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzODI0OTUsImV4cCI6MjA5NDk1ODQ5NX0.q2yzXfKCui_g2eBuBWeitbh5Lrp_WMcbl7KEjryowXE',
   NEWS_COUNT: 5,
   MAX_RETRY: 5,
   RETRY_DELAY: 30000,
@@ -417,6 +418,12 @@ function buildMessage(newsItems) {
 
 async function runBriefing() {
   console.log('🚀 뉴스니핏 브리핑 시작\n');
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY && CONFIG.SUPABASE_KEY === process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.log('🔑 보안 인증: SUPABASE_SERVICE_ROLE_KEY가 감지되었습니다. (보안 강화 모드)');
+  } else {
+    console.log('⚠️ 보안 인증: 공용 SUPABASE_KEY (Anon Key) 권한으로 동작합니다. DB RLS 정책 적용 시 데이터 저장/삭제가 제한될 수 있습니다.');
+  }
+  console.log('');
   try {
     const allNews = await collectNews();
     if (allNews.length === 0) { console.log('❌ 뉴스 없음'); return; }
