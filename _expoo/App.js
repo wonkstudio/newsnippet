@@ -500,17 +500,7 @@ function DetailScreen({ item, onBack, savedIds, onToggleSave, fontSize, isGuest,
 
   const isSaved = savedIds.includes(item.id);
   const isEcon = item.category === '경제';
-  const richAnalysis = item.critic || (isEcon 
-    ? `${item.source} 기사를 분석 중입니다.
-
-핵심 지표 해석: 본 지표의 자산 영향도는 "${item.impactScore || '💰💰 보통'}" 수준으로 측정되었습니다. 특히, 직장인들과 자영업자의 고정 자산 가치에 미치는 직간접적 변동성이 포착되었으며, "${item.investmentSignal || '⚖️ 중립'}" 투자 전략을 신중하게 조율해야 합니다.
-
-전문가 권고 비평: 은퇴 및 재테크 전문가 그룹은 본 기사가 시사하는 단기적 마찰(Friction)에 매몰되기보다는, 중장기적 은퇴 배당 및 세금 혜택 제도(ISA, 연금저축펀드 등)와의 리스크 연계성을 점검할 것을 당부하고 있습니다. 특히 주택 담보 대출 및 가계 부채를 보유한 가구 일수록 고정 지출 상환 흐름을 선제적으로 정리하는 것이 의사결정의 ROI를 높이는 핵심입니다.`
-    : `${item.source} 기사를 분석 중입니다.
-
-핵심 지표 해석: 본 지표의 실생활 영향도는 "${item.impactScore || '💰💰 보통'}" 수준으로 측정되었습니다. 특히, 일상생활과 사회적 관심사에 미치는 직간접적 변동성이 포착되었으며, "${item.investmentSignal || '⚖️ 중립'}" 이슈 흐름에 따라 신중하게 상황을 주시해야 합니다.
-
-전문가 권고 비평: 분야별 전문가 그룹은 본 기사가 시사하는 단기적 이슈에 매몰되기보다는, 일상 리스크 및 대응 요령을 선제적으로 정리하는 것이 의사결정의 만족도를 높이는 핵심이라고 당부하고 있습니다.`);
+  const richAnalysis = item.critic || `전문 에디터가 본 기사의 영향도를 인텔리전스 심층 분석 중입니다. 잠시만 기다려 주세요.`;
 
   const createdDate = item.created_at ? new Date(item.created_at) : new Date();
   const dateStr = `${createdDate.getFullYear()}.${createdDate.getMonth() + 1}.${createdDate.getDate()} 오전 08:30`;
