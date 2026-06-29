@@ -119,7 +119,7 @@ async function callGeminiWithRetry(prompt, attempt) {
     });
     const options = {
       hostname: 'generativelanguage.googleapis.com',
-      path: '/v1/models/gemini-2.5-flash:generateContent?key=' + CONFIG.GEMINI_API_KEY,
+      path: '/v1/models/gemini-3.5-flash:generateContent?key=' + CONFIG.GEMINI_API_KEY,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
